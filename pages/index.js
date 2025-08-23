@@ -190,7 +190,7 @@ export async function getServerSideProps() {
       name: "Sound System",
       price: 20000,
       rentalPrice: 2500,
-      image: "https://images.unsplash.com/photo-1596726895343-5b1f4b5b276d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c291bmQlMjBzeXN0ZW18ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+      image: "https://unsplash.com/photos/microphone-on-dj-controller-ZY7fuakuXJ0",
       category: "events",
       location: "Islamabad"
     },
