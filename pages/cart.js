@@ -71,7 +71,6 @@ const Cart = () => {
   if (loading) {
     return (
       <>
-        <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
@@ -86,7 +85,6 @@ const Cart = () => {
         <meta name="description" content="Your shopping cart" />
       </Head>
 
-      <MainHeader />
       
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Shopping Cart</h1>
