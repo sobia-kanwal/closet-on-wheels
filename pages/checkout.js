@@ -26,43 +26,30 @@ const Checkout = () => {
   const [orderTotal, setOrderTotal] = useState(0);
   const [taxAmount, setTaxAmount] = useState(0);
 
-  // Load cart items on component mount
+  // Load cart items from localStorage
   useEffect(() => {
     const loadCartItems = () => {
       try {
-        // In a real app, this would come from your cart state, context, or API
-        const items = [
-          {
-            id: 'prod_001',
-            name: 'Designer Evening Gown',
-            image: '/images/products/evening-gown.jpg',
-            price: 1500,
-            days: 3,
-            total: 4500
-          },
-          {
-            id: 'prod_002',
-            name: 'Persian Carpet',
-            image: '/images/products/persian-carpet.jpg',
-            price: 2500,
-            days: 7,
-            total: 17500
-          }
-        ];
-        
-        setCartItems(items);
-        const subtotal = items.reduce((sum, item) => sum + item.total, 0);
-        const tax = subtotal * 0.05; // 5% tax
-        
-        setOrderTotal(subtotal + tax);
-        setTaxAmount(tax);
+        const savedCart = localStorage.getItem('cartItems');
+        if (savedCart) {
+          const items = JSON.parse(savedCart);
+          setCartItems(items);
+          
+          const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+          const tax = subtotal * 0.05; // 5% tax
+          
+          setOrderTotal(subtotal + tax);
+          setTaxAmount(tax);
+        }
       } catch (error) {
         console.error('Error loading cart items:', error);
+        // Redirect to home if no cart items
+        router.push('/');
       }
     };
 
     loadCartItems();
-  }, []);
+  }, [router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -114,11 +101,43 @@ const Checkout = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Mock payment processing - always succeeds
-  const processPayment = async () => {
+  const processOrder = async () => {
+    // In a real app, this would call your API
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(true); // Always return success
+        // Generate a unique order ID
+        const orderId = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+        
+        // Create order object
+        const order = {
+          orderId,
+          customer: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city
+          },
+          items: cartItems,
+          subtotal: orderTotal - taxAmount,
+          tax: taxAmount,
+          delivery: formData.paymentMethod === 'cash' ? 100 : 0,
+          total: formData.paymentMethod === 'cash' ? orderTotal + 100 : orderTotal,
+          paymentMethod: formData.paymentMethod,
+          orderDate: new Date().toISOString(),
+          status: 'confirmed'
+        };
+        
+        // Save order to localStorage (in a real app, this would be sent to your backend)
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        
+        // Clear the cart
+        localStorage.removeItem('cartItems');
+        
+        resolve(orderId);
       }, 2000);
     });
   };
@@ -138,18 +157,11 @@ const Checkout = () => {
     setIsProcessing(true);
     
     try {
-      // Process payment (always succeeds in this implementation)
-      await processPayment();
-      
-      // Generate order ID
-      const orderId = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
-      
-      // Redirect to confirmation page with order ID
+      const orderId = await processOrder();
       router.push(`/order-confirmation?orderId=${orderId}`);
     } catch (error) {
-      // This should never happen with our always-succeeding payment processing
-      console.error('Unexpected error:', error);
-      alert('An unexpected error occurred. Please try again.');
+      console.error('Order processing error:', error);
+      alert('Order processing failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -182,6 +194,24 @@ const Checkout = () => {
       cardNumber: formattedValue
     });
   };
+
+  // Redirect if cart is empty
+  if (cartItems.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h1>
+          <p className="text-gray-600 mb-6">Add some items to your cart before checking out.</p>
+          <button 
+            onClick={() => router.push('/')}
+            className="btn-primary py-2 px-6"
+          >
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -471,7 +501,7 @@ const Checkout = () => {
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal ({cartItems.length} items)</span>
+                  <span className="text-gray-600">Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
                   <span className="font-medium">Rs. {(orderTotal - taxAmount).toLocaleString()}</span>
                 </div>
                 
@@ -501,12 +531,15 @@ const Checkout = () => {
                 <div className="space-y-3">
                   {cartItems.map(item => (
                     <div key={item.id} className="flex items-center">
-                      <div className="w-12 h-12 bg-gray-200 rounded-md overflow-hidden mr-3">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      <div className="w-12 h-12 bg-gray-200 rounded-md overflow-hidden mr-3 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">Image</span>
+                        </div>
                       </div>
                       <div className="flex-grow">
                         <p className="text-sm font-medium text-gray-800">{item.name}</p>
                         <p className="text-sm text-gray-600">{item.days} days × Rs. {item.price.toLocaleString()}</p>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                       </div>
                       <span className="font-medium">Rs. {item.total.toLocaleString()}</span>
                     </div>

@@ -88,6 +88,29 @@ const MainHeader = () => {
     };
   }, []);
 
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Fetch cart items from database
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        // In a real application, this would be an API call to your backend
+        // For demonstration, we'll use localStorage as a mock database
+        const savedCart = localStorage.getItem('cartItems');
+        if (savedCart) {
+          const items = JSON.parse(savedCart);
+          setCartItems(items);
+          setCartCount(items.reduce((total, item) => total + item.quantity, 0));
+        }
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
   const handleLogout = () => {
     logout();
     closeAllDropdowns();
@@ -193,6 +216,18 @@ const MainHeader = () => {
               </svg>
               <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
             </Link>
+          <Link href="/cart">
+            <a className="relative p-2 text-gray-700 hover:text-purple-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </a>
+          </Link>
 
             {/* User Account or Login */}
             {user ? (

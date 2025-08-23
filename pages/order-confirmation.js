@@ -1,8 +1,9 @@
-// pages/order-confirmation.js
+// pages/order-confirmation.js (updated Link components)
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import MainHeader from '../components/MainHeader';
 
 const OrderConfirmation = () => {
   const router = useRouter();
@@ -10,59 +11,94 @@ const OrderConfirmation = () => {
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Simulate loading order data
+  // Load order data from localStorage
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // In a real app, this would come from your API or context
-      const order = {
-        orderId: orderId || `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
-        date: new Date().toLocaleDateString(),
-        status: 'Confirmed',
-        items: [
-          {
-            id: 1,
-            name: 'Designer Evening Gown',
-            image: '/images/products/evening-gown.jpg',
-            price: 1500,
-            days: 3,
-            total: 4500
-          },
-          {
-            id: 2,
-            name: 'Persian Carpet',
-            image: '/images/products/persian-carpet.jpg',
-            price: 2500,
-            days: 7,
-            total: 17500
-          }
-        ],
-        subtotal: 22000,
-        tax: 1100,
-        delivery: 0,
-        total: 23100,
-        shipping: {
-          name: 'John Doe',
-          address: '123 Main Street, Block 5',
-          city: 'Karachi',
-          email: 'john.doe@example.com',
-          phone: '+92 300 1234567'
-        },
-        paymentMethod: 'Credit Card',
-        estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()
-      };
+    const loadOrderData = () => {
+      if (!orderId) return;
       
-      setOrderData(order);
-      setLoading(false);
-    }, 1000);
+      try {
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        const order = orders.find(o => o.orderId === orderId);
+        
+        if (order) {
+          setOrderData(order);
+        } else {
+          // If order not found, create a mock order for demonstration
+          setOrderData({
+            orderId,
+            customer: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john.doe@example.com',
+              phone: '+92 300 1234567',
+              address: '123 Main Street',
+              city: 'Karachi'
+            },
+            items: [
+              {
+                id: 1,
+                name: 'Designer Evening Gown',
+                image: '/images/products/evening-gown.jpg',
+                price: 1500,
+                days: 3,
+                quantity: 1,
+                total: 4500
+              },
+              {
+                id: 2,
+                name: 'Persian Carpet',
+                image: '/images/products/persian-carpet.jpg',
+                price: 2500,
+                days: 7,
+                quantity: 1,
+                total: 17500
+              }
+            ],
+            subtotal: 22000,
+            tax: 1100,
+            delivery: 0,
+            total: 23100,
+            paymentMethod: 'credit-card',
+            orderDate: new Date().toISOString(),
+            status: 'confirmed',
+            estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()
+          });
+        }
+      } catch (error) {
+        console.error('Error loading order data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    loadOrderData();
   }, [orderId]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
+      <>
+        <MainHeader />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+      </>
+    );
+  }
+
+  if (!orderData) {
+    return (
+      <>
+        <MainHeader />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Order Not Found</h1>
+            <p className="text-gray-600 mb-6">The order you are looking for does not exist.</p>
+            <Link href="/" className="btn-primary py-2 px-6">
+              Return to Home
+            </Link>
+          </div>
+        </div>
+      </>
     );
   }
 
@@ -72,6 +108,8 @@ const OrderConfirmation = () => {
         <title>Order Confirmation - Closet on Wheels</title>
         <meta name="description" content="Your rental order confirmation" />
       </Head>
+
+      <MainHeader />
 
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="container mx-auto px-4">
@@ -85,7 +123,7 @@ const OrderConfirmation = () => {
               </div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">Order Confirmed!</h1>
               <p className="text-gray-600 mb-4">Thank you for your rental. Your order is now being processed.</p>
-              <p className="text-sm text-gray-500">Order #{orderData.orderId} • Placed on {orderData.date}</p>
+              <p className="text-sm text-gray-500">Order #{orderData.orderId} • Placed on {new Date(orderData.orderDate).toLocaleDateString()}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -97,12 +135,15 @@ const OrderConfirmation = () => {
                   {orderData.items.map(item => (
                     <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-100">
                       <div className="flex items-center">
-                        <div className="w-16 h-16 bg-gray-200 rounded-md overflow-hidden mr-4">
-                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <div className="w-16 h-16 bg-gray-200 rounded-md overflow-hidden mr-4 flex items-center justify-center">
+                          <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                            <span className="text-gray-500 text-xs">Image</span>
+                          </div>
                         </div>
                         <div>
                           <p className="font-medium text-gray-800">{item.name}</p>
                           <p className="text-sm text-gray-600">{item.days} days × Rs. {item.price.toLocaleString()}</p>
+                          <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                         </div>
                       </div>
                       <span className="font-medium">Rs. {item.total.toLocaleString()}</span>
@@ -138,11 +179,11 @@ const OrderConfirmation = () => {
                   <h2 className="text-xl font-semibold mb-4 text-gray-800">Shipping Information</h2>
                   
                   <div className="space-y-2">
-                    <p className="font-medium">{orderData.shipping.name}</p>
-                    <p className="text-gray-600">{orderData.shipping.address}</p>
-                    <p className="text-gray-600">{orderData.shipping.city}</p>
-                    <p className="text-gray-600">{orderData.shipping.email}</p>
-                    <p className="text-gray-600">{orderData.shipping.phone}</p>
+                    <p className="font-medium">{orderData.customer.firstName} {orderData.customer.lastName}</p>
+                    <p className="text-gray-600">{orderData.customer.address}</p>
+                    <p className="text-gray-600">{orderData.customer.city}</p>
+                    <p className="text-gray-600">{orderData.customer.email}</p>
+                    <p className="text-gray-600">{orderData.customer.phone}</p>
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-gray-200">
@@ -155,7 +196,7 @@ const OrderConfirmation = () => {
                   
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                      {orderData.paymentMethod === 'Credit Card' ? (
+                      {orderData.paymentMethod === 'credit-card' ? (
                         <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                         </svg>
@@ -166,8 +207,12 @@ const OrderConfirmation = () => {
                       )}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-800">{orderData.paymentMethod}</p>
-                      <p className="text-sm text-gray-600">Paid on {orderData.date}</p>
+                      <p className="font-medium text-gray-800">
+                        {orderData.paymentMethod === 'credit-card' ? 'Credit/Debit Card' : 
+                         orderData.paymentMethod === 'jazzcash' ? 'JazzCash' :
+                         orderData.paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'Cash on Delivery'}
+                      </p>
+                      <p className="text-sm text-gray-600">Paid on {new Date(orderData.orderDate).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
