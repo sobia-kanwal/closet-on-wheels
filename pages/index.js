@@ -33,11 +33,6 @@ export default function Home({ initialProducts }) {
       {/* Filter Bar */}
       <FilterBar onFilterChange={handleFilterChange} />
       
-      {/* Featured Products */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Featured Products</h2>
-        <ProductGrid products={products} />
-      </section>
 
 {/* Categories Section */}
 <section className="bg-gray-100 py-12">
@@ -100,6 +95,7 @@ export default function Home({ initialProducts }) {
     </div>
   </div>
 </section>
+
       {/* How It Works Section */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
@@ -130,6 +126,12 @@ export default function Home({ initialProducts }) {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Featured Products</h2>
+        <ProductGrid products={products} />
       </section>
     </>
   );

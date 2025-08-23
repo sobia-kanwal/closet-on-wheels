@@ -10,6 +10,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in on initial load
@@ -22,7 +23,13 @@ export function AuthProvider({ children }) {
 
   const login = (userData) => {
     setUser(userData);
+    setShowWelcome(true);
     localStorage.setItem('user', JSON.stringify(userData));
+    
+    // Hide welcome message after 5 seconds
+    setTimeout(() => {
+      setShowWelcome(false);
+    }, 5000);
   };
 
   const logout = () => {
@@ -31,8 +38,9 @@ export function AuthProvider({ children }) {
   };
 
   const updateUser = (userData) => {
-    setUser({...user, ...userData});
-    localStorage.setItem('user', JSON.stringify({...user, ...userData}));
+    const updatedUser = {...user, ...userData};
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const value = {
@@ -40,7 +48,9 @@ export function AuthProvider({ children }) {
     login,
     logout,
     updateUser,
-    loading
+    loading,
+    showWelcome,
+    setShowWelcome
   };
 
   return (

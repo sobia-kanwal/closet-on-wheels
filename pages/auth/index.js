@@ -4,13 +4,24 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthContext';
+// In pages/auth/index.js, add this useEffect to handle redirects
+import { useEffect } from 'react';
 
 const AuthPage = () => {
+  const router = useRouter();
+  const { redirect, type } = router.query;
+  
+  // Set active tab based on URL parameter
+  useEffect(() => {
+    if (type === 'lender') {
+      setActiveTab('register');
+      setRegisterData(prev => ({ ...prev, userType: 'lender' }));
+    }
+  }, [type]);
   const [activeTab, setActiveTab] = useState('login');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const router = useRouter();
   const { login } = useAuth();
 
   // Login form state
