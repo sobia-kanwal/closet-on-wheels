@@ -1,10 +1,13 @@
-// pages/checkout.js
-import { useState, useEffect } from 'react';
+// pages/checkout.js (Updated to use cart context)
+import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import MainHeader from '../components/MainHeader';
+import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
   const router = useRouter();
+  const { cart, getCartTotal, clearCart } = useCart();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -22,34 +25,9 @@ const Checkout = () => {
 
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [orderTotal, setOrderTotal] = useState(0);
-  const [taxAmount, setTaxAmount] = useState(0);
 
-  // Load cart items from localStorage
-  useEffect(() => {
-    const loadCartItems = () => {
-      try {
-        const savedCart = localStorage.getItem('cartItems');
-        if (savedCart) {
-          const items = JSON.parse(savedCart);
-          setCartItems(items);
-          
-          const subtotal = items.reduce((sum, item) => sum + item.total, 0);
-          const tax = subtotal * 0.05; // 5% tax
-          
-          setOrderTotal(subtotal + tax);
-          setTaxAmount(tax);
-        }
-      } catch (error) {
-        console.error('Error loading cart items:', error);
-        // Redirect to home if no cart items
-        router.push('/');
-      }
-    };
-
-    loadCartItems();
-  }, [router]);
+  const taxAmount = getCartTotal() * 0.05;
+  const orderTotal = getCartTotal() + taxAmount;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -119,8 +97,8 @@ const Checkout = () => {
             address: formData.address,
             city: formData.city
           },
-          items: cartItems,
-          subtotal: orderTotal - taxAmount,
+          items: cart,
+          subtotal: getCartTotal(),
           tax: taxAmount,
           delivery: formData.paymentMethod === 'cash' ? 100 : 0,
           total: formData.paymentMethod === 'cash' ? orderTotal + 100 : orderTotal,
@@ -135,7 +113,7 @@ const Checkout = () => {
         localStorage.setItem('orders', JSON.stringify(orders));
         
         // Clear the cart
-        localStorage.removeItem('cartItems');
+        clearCart();
         
         resolve(orderId);
       }, 2000);
@@ -196,20 +174,23 @@ const Checkout = () => {
   };
 
   // Redirect if cart is empty
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h1>
-          <p className="text-gray-600 mb-6">Add some items to your cart before checking out.</p>
-          <button 
-            onClick={() => router.push('/')}
-            className="btn-primary py-2 px-6"
-          >
-            Continue Shopping
-          </button>
+      <>
+        <MainHeader />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h1>
+            <p className="text-gray-600 mb-6">Add some items to your cart before checking out.</p>
+            <button 
+              onClick={() => router.push('/')}
+              className="btn-primary py-2 px-6"
+            >
+              Continue Shopping
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -219,6 +200,8 @@ const Checkout = () => {
         <title>Checkout - Closet on Wheels</title>
         <meta name="description" content="Complete your rental order" />
       </Head>
+
+      <MainHeader />
 
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Checkout</h1>
@@ -501,8 +484,8 @@ const Checkout = () => {
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
-                  <span className="font-medium">Rs. {(orderTotal - taxAmount).toLocaleString()}</span>
+                  <span className="text-gray-600">Subtotal ({cart.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
+                  <span className="font-medium">Rs. {getCartTotal().toLocaleString()}</span>
                 </div>
                 
                 <div className="flex justify-between">
@@ -529,7 +512,7 @@ const Checkout = () => {
                 <h3 className="font-semibold mb-3 text-gray-800">Rental Items</h3>
                 
                 <div className="space-y-3">
-                  {cartItems.map(item => (
+                  {cart.map(item => (
                     <div key={item.id} className="flex items-center">
                       <div className="w-12 h-12 bg-gray-200 rounded-md overflow-hidden mr-3 flex items-center justify-center">
                         <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">

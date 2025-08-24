@@ -1,4 +1,4 @@
-// pages/order-confirmation.js (updated Link components)
+// pages/order-confirmation.js
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -10,62 +10,31 @@ const OrderConfirmation = () => {
   const { orderId } = router.query;
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Load order data from localStorage
+  // Load order data from database
   useEffect(() => {
     const loadOrderData = () => {
-      if (!orderId) return;
+      if (!orderId) {
+        setError('No order ID provided');
+        setLoading(false);
+        return;
+      }
       
       try {
+        // In a real app, this would be an API call to your backend
         const orders = JSON.parse(localStorage.getItem('orders') || '[]');
         const order = orders.find(o => o.orderId === orderId);
         
         if (order) {
           setOrderData(order);
+          setError(null);
         } else {
-          // If order not found, create a mock order for demonstration
-          setOrderData({
-            orderId,
-            customer: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john.doe@example.com',
-              phone: '+92 300 1234567',
-              address: '123 Main Street',
-              city: 'Karachi'
-            },
-            items: [
-              {
-                id: 1,
-                name: 'Designer Evening Gown',
-                image: '/images/products/evening-gown.jpg',
-                price: 1500,
-                days: 3,
-                quantity: 1,
-                total: 4500
-              },
-              {
-                id: 2,
-                name: 'Persian Carpet',
-                image: '/images/products/persian-carpet.jpg',
-                price: 2500,
-                days: 7,
-                quantity: 1,
-                total: 17500
-              }
-            ],
-            subtotal: 22000,
-            tax: 1100,
-            delivery: 0,
-            total: 23100,
-            paymentMethod: 'credit-card',
-            orderDate: new Date().toISOString(),
-            status: 'confirmed',
-            estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()
-          });
+          setError('Order not found');
         }
       } catch (error) {
         console.error('Error loading order data:', error);
+        setError('Error loading order details');
       } finally {
         setLoading(false);
       }
@@ -85,14 +54,14 @@ const OrderConfirmation = () => {
     );
   }
 
-  if (!orderData) {
+  if (error || !orderData) {
     return (
       <>
         <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Order Not Found</h1>
-            <p className="text-gray-600 mb-6">The order you are looking for does not exist.</p>
+            <p className="text-gray-600 mb-6">{error || 'The order you are looking for does not exist.'}</p>
             <Link href="/" className="btn-primary py-2 px-6">
               Return to Home
             </Link>
@@ -187,7 +156,7 @@ const OrderConfirmation = () => {
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-gray-200">
-                    <p className="text-gray-600"><span className="font-medium">Estimated Delivery:</span> {orderData.estimatedDelivery}</p>
+                    <p className="text-gray-600"><span className="font-medium">Estimated Delivery:</span> {new Date(orderData.estimatedDelivery).toLocaleDateString()}</p>
                   </div>
                 </div>
 

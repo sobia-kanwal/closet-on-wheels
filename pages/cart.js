@@ -1,82 +1,35 @@
-// pages/cart.js (updated Link components)
+// pages/cart.js (Updated with cart context)
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import MainHeader from '../components/MainHeader';
+import { useCart } from '../context/CartContext';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch cart items from database
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        // In a real application, this would be an API call to your backend
-        const savedCart = localStorage.getItem('cartItems');
-        if (savedCart) {
-          setCartItems(JSON.parse(savedCart));
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchCartItems();
-  }, []);
+  const { cart, updateCartItem, removeFromCart, clearCart, getCartTotal } = useCart();
+  const [loading, setLoading] = useState(false);
 
   const updateDays = (productId, days) => {
     const daysValue = Math.max(1, parseInt(days) || 1);
-    const updatedCart = cartItems.map(item => 
-      item.id === productId 
-        ? { ...item, days: daysValue, total: item.price * item.quantity * daysValue }
-        : item
-    );
-    setCartItems(updatedCart);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    updateCartItem(productId, { days: daysValue });
   };
 
   const updateQuantity = (productId, quantity) => {
     const quantityValue = Math.max(1, parseInt(quantity) || 1);
-    const updatedCart = cartItems.map(item => 
-      item.id === productId 
-        ? { ...item, quantity: quantityValue, total: item.price * quantityValue * item.days }
-        : item
-    );
-    setCartItems(updatedCart);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    updateCartItem(productId, { quantity: quantityValue });
   };
 
-  const removeFromCart = (productId) => {
-    const updatedCart = cartItems.filter(item => item.id !== productId);
-    setCartItems(updatedCart);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+  const handleRemoveFromCart = (productId) => {
+    removeFromCart(productId);
   };
 
-  const clearCart = () => {
-    setCartItems([]);
-    localStorage.removeItem('cartItems');
-  };
-
-  const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.total, 0);
+  const handleClearCart = () => {
+    clearCart();
   };
 
   const getCartItemsCount = () => {
-    return cartItems.reduce((count, item) => count + item.quantity, 0);
+    return cart.reduce((count, item) => count + item.quantity, 0);
   };
-
-  if (loading) {
-    return (
-      <>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -85,11 +38,12 @@ const Cart = () => {
         <meta name="description" content="Your shopping cart" />
       </Head>
 
+      <MainHeader />
       
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Shopping Cart</h1>
         
-        {cartItems.length === 0 ? (
+        {cart.length === 0 ? (
           <div className="text-center py-12">
             <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
@@ -105,7 +59,7 @@ const Cart = () => {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <div className="flow-root">
                   <ul className="-my-6 divide-y divide-gray-200">
-                    {cartItems.map(item => (
+                    {cart.map(item => (
                       <li key={item.id} className="py-6 flex">
                         <div className="flex-shrink-0 w-24 h-24 bg-gray-200 rounded-md overflow-hidden flex items-center justify-center">
                           <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
@@ -147,7 +101,7 @@ const Cart = () => {
                             </div>
 
                             <button 
-                              onClick={() => removeFromCart(item.id)}
+                              onClick={() => handleRemoveFromCart(item.id)}
                               className="font-medium text-red-600 hover:text-red-500"
                             >
                               Remove
@@ -162,7 +116,7 @@ const Cart = () => {
               
               <div className="mt-4">
                 <button 
-                  onClick={clearCart}
+                  onClick={handleClearCart}
                   className="btn-outline w-full text-center"
                 >
                   Clear Cart
