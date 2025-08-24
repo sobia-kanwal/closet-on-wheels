@@ -1,8 +1,8 @@
 // pages/api/products.js
-import { connectToDatabase } from '../../lib/mongodb';
+import { connectDB } from '../../lib/mongodb';
 
 export default async function handler(req, res) {
-  const { db } = await connectToDatabase();
+  const { db } = await connectDB();
 
   if (req.method === 'GET') {
     try {

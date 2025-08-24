@@ -365,7 +365,7 @@ const AuthPage = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       placeholder="Enter your phone number"
                       value={registerData.phone}
-                      onChange极速加速器={handleRegisterChange}
+                      onChange={handleRegisterChange}
                     />
                   </div>
                   <div>
@@ -389,7 +389,7 @@ const AuthPage = () => {
                       Password
                     </label>
                     <input
-                      id极速加速器="register-password"
+                      inputMode="register-password"
                       name="password"
                       type="password"
                       required

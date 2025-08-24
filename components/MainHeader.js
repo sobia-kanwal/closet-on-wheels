@@ -1,23 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link'; // Use Next.js Link
+import { useAuth } from '../context/AuthContext'; // Real AuthContext
+import { useRouter } from 'next/router'; // Real Next.js router
 import Logo from './Logo';
-
-// Mock components to make the code runnable in this environment.
-// In a real Next.js app, these would be imported from their respective files.
-const Link = ({ href, children, className, onClick }) => (
-  <a href={href} className={className} onClick={onClick}>
-    {children}
-  </a>
-);
-
-const useAuth = () => ({
-  user: { name: 'John Doe', email: 'johndoe@example.com', type: 'user' },
-  logout: () => alert('Logout action triggered'),
-});
-
-const useRouter = () => ({
-  push: (path) => console.log(`Navigating to ${path}`),
-});
-
+import { useCart } from '../context/CartContext'; // Add this import
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,6 +11,9 @@ const MainHeader = () => {
   const headerRef = useRef(null);
   const router = useRouter();
   const { user, logout } = useAuth();
+  
+  //const { cartCount } = useCart(); // Use cartCount from CartContext
+  
   
   // A list of the navigation items to make the component more maintainable.
   const navItems = [
@@ -111,6 +100,7 @@ const MainHeader = () => {
     closeAllDropdowns();
     router.push('/');
   };
+
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50 font-sans" ref={headerRef}>
@@ -262,7 +252,6 @@ const MainHeader = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="ml-1 text-sm hidden md:inline">Login</span>
               </Link>
             )}
 

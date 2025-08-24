@@ -1,22 +1,18 @@
-// pages/_app.js (Wrap app with CartProvider)
-import { useEffect } from 'react';
+import { LayoutGroup } from 'framer-motion';
+import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../context/CartContext';
-import { initializeSampleProducts } from '../lib/db';
-import '../styles/globals.css';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout'
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
-  // Initialize sample products on app load
-  useEffect(() => {
-    initializeSampleProducts();
-  }, []);
-
   return (
-    <CartProvider>
-      <Layout>
-      <Component {...pageProps} />
-      </Layout>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+       <Layout>
+        <Component {...pageProps} />
+        </Layout>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
