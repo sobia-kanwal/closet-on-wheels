@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { CartProvider } from '../context/CartContext';
 import { initializeSampleProducts } from '../lib/db';
 import '../styles/globals.css';
+import Layout from '../components/Layout';
 
 function MyApp({ Component, pageProps }) {
   // Initialize sample products on app load
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <CartProvider>
+      <Layout>
       <Component {...pageProps} />
+      </Layout>
     </CartProvider>
   );
 }

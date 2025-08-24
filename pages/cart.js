@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import MainHeader from '../components/MainHeader';
 import { useCart } from '../context/CartContext';
 
 const Cart = () => {
@@ -37,8 +36,6 @@ const Cart = () => {
         <title>Shopping Cart - Closet on Wheels</title>
         <meta name="description" content="Your shopping cart" />
       </Head>
-
-      <MainHeader />
       
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Shopping Cart</h1>

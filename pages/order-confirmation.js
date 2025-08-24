@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import MainHeader from '../components/MainHeader';
 
 const OrderConfirmation = () => {
   const router = useRouter();
@@ -40,13 +39,13 @@ const OrderConfirmation = () => {
       }
     };
 
+
     loadOrderData();
   }, [orderId]);
 
   if (loading) {
     return (
       <>
-        <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
@@ -57,7 +56,6 @@ const OrderConfirmation = () => {
   if (error || !orderData) {
     return (
       <>
-        <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Order Not Found</h1>
@@ -78,7 +76,6 @@ const OrderConfirmation = () => {
         <meta name="description" content="Your rental order confirmation" />
       </Head>
 
-      <MainHeader />
 
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="container mx-auto px-4">

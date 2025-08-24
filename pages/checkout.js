@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import MainHeader from '../components/MainHeader';
 import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
@@ -177,7 +176,6 @@ const Checkout = () => {
   if (cart.length === 0) {
     return (
       <>
-        <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h1>
@@ -200,8 +198,6 @@ const Checkout = () => {
         <title>Checkout - Closet on Wheels</title>
         <meta name="description" content="Complete your rental order" />
       </Head>
-
-      <MainHeader />
 
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Checkout</h1>

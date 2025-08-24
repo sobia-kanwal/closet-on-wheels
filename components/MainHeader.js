@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import Logo from './Logo';
 
 // Mock components to make the code runnable in this environment.
 // In a real Next.js app, these would be imported from their respective files.
@@ -12,12 +13,6 @@ const useAuth = () => ({
   user: { name: 'John Doe', email: 'johndoe@example.com', type: 'user' },
   logout: () => alert('Logout action triggered'),
 });
-
-const Logo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="h-10 w-10 text-purple-600">
-    <path fill="currentColor" d="M50 0 L100 25 L100 75 L50 100 L0 75 L0 25 Z" />
-  </svg>
-);
 
 const useRouter = () => ({
   push: (path) => console.log(`Navigating to ${path}`),
