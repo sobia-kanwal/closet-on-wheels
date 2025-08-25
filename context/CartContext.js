@@ -1,4 +1,4 @@
-// context/CartContext.js (React Context for cart state management)
+// context/CartContext.js
 import { createContext, useContext, useState, useEffect } from 'react';
 import { db } from '../lib/db';
 
@@ -15,8 +15,10 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  const [wishlist, setWishlist] = useState([]);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
-  // Load cart from database on component mount
+  // Load cart and wishlist from database on component mount
   useEffect(() => {
     const loadCart = () => {
       const cartItems = db.cart.get();
@@ -24,10 +26,17 @@ export const CartProvider = ({ children }) => {
       setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
     };
 
+    const loadWishlist = () => {
+      const wishlistItems = db.wishlist.get();
+      setWishlist(wishlistItems);
+      setWishlistCount(wishlistItems.length);
+    };
+
     loadCart();
+    loadWishlist();
   }, []);
 
-  // Function to add item to cart
+  // Cart functions
   const addToCart = (product) => {
     const updatedCart = db.cart.add(product);
     setCart(updatedCart);
@@ -35,7 +44,6 @@ export const CartProvider = ({ children }) => {
     return updatedCart;
   };
 
-  // Function to update item in cart
   const updateCartItem = (productId, updates) => {
     const updatedCart = db.cart.update(productId, updates);
     setCart(updatedCart);
@@ -43,7 +51,6 @@ export const CartProvider = ({ children }) => {
     return updatedCart;
   };
 
-  // Function to remove item from cart
   const removeFromCart = (productId) => {
     const updatedCart = db.cart.remove(productId);
     setCart(updatedCart);
@@ -51,7 +58,6 @@ export const CartProvider = ({ children }) => {
     return updatedCart;
   };
 
-  // Function to clear cart
   const clearCart = () => {
     const updatedCart = db.cart.clear();
     setCart(updatedCart);
@@ -59,19 +65,58 @@ export const CartProvider = ({ children }) => {
     return updatedCart;
   };
 
-  // Function to get cart total
   const getCartTotal = () => {
     return cart.reduce((total, item) => total + item.total, 0);
+  };
+
+  // Wishlist functions
+  const addToWishlist = (product) => {
+    const updatedWishlist = db.wishlist.add(product);
+    setWishlist(updatedWishlist);
+    setWishlistCount(updatedWishlist.length);
+    return updatedWishlist;
+  };
+
+  const removeFromWishlist = (productId) => {
+    const updatedWishlist = db.wishlist.remove(productId);
+    setWishlist(updatedWishlist);
+    setWishlistCount(updatedWishlist.length);
+    return updatedWishlist;
+  };
+
+  const isInWishlist = (productId) => {
+    return wishlist.some(item => item.id === productId);
+  };
+
+  const clearWishlist = () => {
+    const updatedWishlist = db.wishlist.clear();
+    setWishlist(updatedWishlist);
+    setWishlistCount(0);
+    return updatedWishlist;
+  };
+
+  // Combined function to add to cart and remove from wishlist
+  const addToCartAndRemoveFromWishlist = (product) => {
+    const updatedCart = addToCart(product);
+    removeFromWishlist(product.id);
+    return updatedCart;
   };
 
   const value = {
     cart,
     cartCount,
+    wishlist,
+    wishlistCount,
     addToCart,
     updateCartItem,
     removeFromCart,
     clearCart,
-    getCartTotal
+    getCartTotal,
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    clearWishlist,
+    addToCartAndRemoveFromWishlist // New function
   };
 
   return (

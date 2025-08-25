@@ -1,17 +1,16 @@
 // components/BannerSlider.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const BannerSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const progressRef = useRef(null);
   
   const slides = [
     {
       id: 1,
-      image: "../public/images/Pakistani-Bridal-Wear-Designers.jpg",
+      image: "/images/categories/Pakistani-Bridal-Wear-Designers.jpg",
       title: "Fashion Collection",
       subtitle: "Rent Designer Outfits for Every Occasion",
       description: "Get access to premium fashion without the price tag",
@@ -147,16 +146,7 @@ const BannerSlider = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>
-      
-      {/* Progress bar */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gray-200/50 z-10">
-        <div 
-          className="h-full bg-purple-600 transition-all duration-300 ease-linear"
-          style={{ width: `${progress}%` }}
-          ref={progressRef}
-        ></div>
-      </div>
-      
+
       {/* Navigation dots with progress indicators */}
       <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-3 z-10">
         {slides.map((_, index) => (

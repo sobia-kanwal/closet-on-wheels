@@ -1,33 +1,45 @@
-// components/AddToCartButton.js (Updated with cart context)
+// components/AddToCartButton.js
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 
-const AddToCartButton = ({ product }) => {
-  const [isAdding, setIsAdding] = useState(false);
-  const { addToCart } = useCart();
+const AddToCartButton = ({ product, variant = 'primary' }) => {
+  const [loading, setLoading] = useState(false);
+  const { addToCart, addToCartAndRemoveFromWishlist, isInWishlist } = useCart();
 
   const handleAddToCart = async () => {
-    setIsAdding(true);
-    
+    setLoading(true);
     try {
-      addToCart(product);
-      // Show success feedback
-      alert(`${product.name} added to cart!`);
+      // Check if the product is in the wishlist
+      const inWishlist = isInWishlist(product.id);
+      
+      if (inWishlist) {
+        // Use the combined function that adds to cart and removes from wishlist
+        addToCartAndRemoveFromWishlist(product);
+        alert(`${product.name} added to cart and removed from wishlist!`);
+      } else {
+        // Standard add to cart
+        addToCart(product);
+        alert(`${product.name} added to cart!`);
+      }
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Failed to add product to cart. Please try again.');
     } finally {
-      setIsAdding(false);
+      setLoading(false);
     }
   };
 
+  const buttonClass = variant === 'primary' 
+    ? 'bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 disabled:opacity-50'
+    : 'bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 disabled:opacity-50';
+
   return (
-    <button 
+    <button
       onClick={handleAddToCart}
-      disabled={isAdding}
-      className="btn-primary w-full"
+      disabled={loading}
+      className={buttonClass}
     >
-      {isAdding ? 'Adding...' : 'Add to Cart'}
+      {loading ? 'Adding...' : 'Add to Cart'}
     </button>
   );
 };

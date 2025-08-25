@@ -42,7 +42,7 @@ export default function Home({ initialProducts }) {
       <div className="bg-white rounded-sm overflow-hidden shadow-md hover:shadow-lg transition duration-300">
         <div className="h-48 relative">
           <Image
-            src="~/images/Pakistani-Bridal-Wear-Designers.jpg"
+            src="/images/categories/Pakistani-Bridal-Wear-Designers.jpg"
             alt="Fashion"
             fill
             className="object-cover"
@@ -190,7 +190,7 @@ export async function getServerSideProps() {
       name: "Sound System",
       price: 20000,
       rentalPrice: 2500,
-      image: "https://images.unsplash.com/photo-1596726895343-5b1f4b5b276d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c291bmQlMjBzeXN0ZW18ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+      image: "https://images.unsplash.com/photo-1520444451380-ebe0f7b9cfd5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "events",
       location: "Islamabad"
     },

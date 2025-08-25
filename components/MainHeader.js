@@ -1,9 +1,10 @@
+// components/MainHeader.js
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link'; // Use Next.js Link
-import { useAuth } from '../context/AuthContext'; // Real AuthContext
-import { useRouter } from 'next/router'; // Real Next.js router
+import Link from 'next/link';
+import { useAuth } from '../context/AuthContext';
+import { useRouter } from 'next/router';
 import Logo from './Logo';
-import { useCart } from '../context/CartContext'; // Add this import
+import { useCart } from '../context/CartContext';
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,9 +12,8 @@ const MainHeader = () => {
   const headerRef = useRef(null);
   const router = useRouter();
   const { user, logout } = useAuth();
-  
-  //const { cartCount } = useCart(); // Use cartCount from CartContext
-  
+  const { cartCount, wishlistCount } = useCart(); // Get both cart and wishlist counts
+
   
   // A list of the navigation items to make the component more maintainable.
   const navItems = [
@@ -72,28 +72,7 @@ const MainHeader = () => {
     };
   }, []);
 
-  const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
 
-  // Fetch cart items from database
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        // In a real application, this would be an API call to your backend
-        // For demonstration, we'll use localStorage as a mock database
-        const savedCart = localStorage.getItem('cartItems');
-        if (savedCart) {
-          const items = JSON.parse(savedCart);
-          setCartItems(items);
-          setCartCount(items.reduce((total, item) => total + item.quantity, 0));
-        }
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
-    };
-
-    fetchCartItems();
-  }, []);
 
   const handleLogout = () => {
     logout();
@@ -187,12 +166,16 @@ const MainHeader = () => {
             </button>
 
             {/* Wishlist */}
-            <button className="text-gray-600 hover:text-purple-600 relative">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">2</span>
-            </button>
+<Link href="/wishlist" className="text-gray-600 hover:text-purple-600 relative">
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+  </svg>
+  {wishlistCount > 0 && (
+    <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+      {wishlistCount}
+    </span>
+  )}
+</Link>
 
             {/* Shopping Cart */}
             <Link href="/cart" className="text-gray-600 hover:text-purple-600 relative">
