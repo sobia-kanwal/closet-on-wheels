@@ -11,7 +11,7 @@ const BannerSlider = () => {
   const slides = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbiUyMGJhbm5lcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1200&q=80",
+      image: "../public/images/Pakistani-Bridal-Wear-Designers.jpg",
       title: "Fashion Collection",
       subtitle: "Rent Designer Outfits for Every Occasion",
       description: "Get access to premium fashion without the price tag",
