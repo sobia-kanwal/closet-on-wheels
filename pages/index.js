@@ -42,7 +42,7 @@ export default function Home({ initialProducts }) {
       <div className="bg-white rounded-sm overflow-hidden shadow-md hover:shadow-lg transition duration-300">
         <div className="h-48 relative">
           <Image
-            src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbiUyMGJhbm5lcnxlbnwwfHwwfMA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            src="~/images/Pakistani-Bridal-Wear-Designers.jpg"
             alt="Fashion"
             fill
             className="object-cover"
