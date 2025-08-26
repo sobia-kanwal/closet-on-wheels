@@ -1,41 +1,36 @@
-// pages/api/products.js
-import { connectDB } from '../../lib/mongodb';
+import connectDB from '../../lib/mongodb';
+import Product from '../../models/Product';
+import { getSessionUser } from '../../utils/encryption';
 
 export default async function handler(req, res) {
-  const { db } = await connectDB();
+  await connectDB();
+
+  const user = getSessionUser();
+  if (!user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
 
   if (req.method === 'GET') {
     try {
-      const { category, location, startDate, endDate } = req.query;
-      
-      let query = {};
-      
-      if (category) query.category = category;
-      if (location) query.location = location;
-      
-      if (startDate && endDate) {
-        query['availability.startDate'] = { $lte: new Date(endDate) };
-        query['availability.endDate'] = { $gte: new Date(startDate) };
-      }
-      
-      const products = await db
-        .collection('products')
-        .find(query)
-        .toArray();
-      
+      // Get all approved products
+      const products = await Product.find({ status: 'approved' }).populate('lenderId', 'name email');
       res.status(200).json(products);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch products' });
+      res.status(500).json({ message: 'Server error', error: error.message });
     }
   } else if (req.method === 'POST') {
     try {
-      const product = req.body;
-      const result = await db.collection('products').insertOne(product);
-      res.status(201).json({ success: true, productId: result.insertedId });
+      const productData = {
+        ...req.body,
+        lenderId: user.id
+      };
+      
+      const product = await Product.create(productData);
+      res.status(201).json(product);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to create product' });
+      res.status(500).json({ message: 'Server error', error: error.message });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ message: 'Method not allowed' });
   }
 }
