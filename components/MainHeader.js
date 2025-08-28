@@ -296,11 +296,6 @@ const MainHeader = () => {
                 Become a Lender
               </div>
             </Link>
-            <Link href="/lender-form" onClick={closeAllDropdowns}>
-              <div className="hidden md:block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300 cursor-pointer font-medium">
-                Rent With Us
-              </div>
-            </Link>
             
           </div>
         </nav>
