@@ -41,7 +41,7 @@ const FilterBar = ({ onFilterChange }) => {
               name="location"
               value={filters.location}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-purple-500 focus:border-purple-500 text-sm"
+              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
             >
               <option value="">All Locations</option>
               <option value="karachi">Karachi</option>
@@ -60,7 +60,7 @@ const FilterBar = ({ onFilterChange }) => {
               name="category"
               value={filters.category}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-purple-500 focus:border-purple-500 text-sm"
+              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
             >
               <option value="">All Categories</option>
               <option value="fashion">Fashion</option>
@@ -76,7 +76,7 @@ const FilterBar = ({ onFilterChange }) => {
               name="dateRange"
               value={filters.dateRange}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-purple-500 focus:border-purple-500 text-sm"
+              className="w-full p-2 border border-gray-300 rounded-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
             >
               <option value="">Any Dates</option>
               <option value="today">Today</option>
@@ -92,7 +92,7 @@ const FilterBar = ({ onFilterChange }) => {
         <div className="flex items-center">
           <button 
             onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className="mr-3 text-gray-600 hover:text-purple-600 md:hidden"
+            className="mr-3 text-gray-600 hover:text-teal-600 md:hidden"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -105,11 +105,11 @@ const FilterBar = ({ onFilterChange }) => {
                 type="text"
                 name="search"
                 placeholder="Search for products, brands, or categories..."
-                className="flex-grow px-4 py-2 border border-gray-300 rounded-l-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
+                className="flex-grow px-4 py-2 border border-gray-300 rounded-l-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
               />
               <button
                 type="submit"
-                className="bg-purple-600 text-white px-4 py-2 rounded-r-sm hover:bg-purple-700 transition duration-300 text-sm"
+                className="bg-teal-600 text-white px-4 py-2 rounded-r-sm hover:bg-teal-700 transition duration-300 text-sm"
               >
                 Search
               </button>

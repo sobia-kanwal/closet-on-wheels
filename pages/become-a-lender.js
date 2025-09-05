@@ -17,24 +17,24 @@ const BecomeALender = () => {
           <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">1</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">1</span>
               </div>
               <h3 className="font-semibold mb-2">List Your Items</h3>
               <p className="text-gray-600">Create a profile and list your items with photos and descriptions.</p>
             </div>
             
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">2</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">2</span>
               </div>
               <h3 className="font-semibold mb-2">Get Booking Requests</h3>
               <p className="text-gray-600">Receive booking requests from customers interested in your items.</p>
             </div>
             
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">3</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">3</span>
               </div>
               <h3 className="font-semibold mb-2">Earn Money</h3>
               <p className="text-gray-600">Earn money from renting out your items while they&apos;re not in use.</p>
@@ -44,7 +44,7 @@ const BecomeALender = () => {
           <div className="text-center">
             <a 
               href="/lender-form"
-              className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition duration-300 inline-block"
+              className="bg-teal-600 text-white px-6 py-3 rounded-md hover:bg-teal-700 transition duration-300 inline-block"
             >
               Get Started Now
             </a>

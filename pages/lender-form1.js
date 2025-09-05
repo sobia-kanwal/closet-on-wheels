@@ -75,13 +75,13 @@ const LenderForm = () => {
             {/* Progress Steps */}
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                <div className={`text-sm font-medium ${currentStep >= 1 ? 'text-purple-600' : 'text-gray-500'}`}>Personal Info</div>
-                <div className={`text-sm font-medium ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-500'}`}>Product Details</div>
-                <div className={`text-sm font-medium ${currentStep >= 3 ? 'text-purple-600' : 'text-gray-500'}`}>Pricing & Availability</div>
+                <div className={`text-sm font-medium ${currentStep >= 1 ? 'text-teal-600' : 'text-gray-500'}`}>Personal Info</div>
+                <div className={`text-sm font-medium ${currentStep >= 2 ? 'text-teal-600' : 'text-gray-500'}`}>Product Details</div>
+                <div className={`text-sm font-medium ${currentStep >= 3 ? 'text-teal-600' : 'text-gray-500'}`}>Pricing & Availability</div>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div 
-                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-300" 
+                  className="bg-teal-600 h-2.5 rounded-full transition-all duration-300" 
                   style={{ width: `${(currentStep / 3) * 100}%` }}
                 ></div>
               </div>
@@ -103,7 +103,7 @@ const LenderForm = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
                     
@@ -116,7 +116,7 @@ const LenderForm = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
                   </div>
@@ -131,7 +131,7 @@ const LenderForm = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
                     
@@ -143,7 +143,7 @@ const LenderForm = () => {
                         value={formData.city}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       >
                         <option value="">Select City</option>
                         <option value="karachi">Karachi</option>
@@ -167,7 +167,7 @@ const LenderForm = () => {
                       onChange={handleInputChange}
                       required
                       rows={3}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     ></textarea>
                   </div>
                   
@@ -175,7 +175,7 @@ const LenderForm = () => {
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                      className="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition duration-300"
                     >
                       Next
                     </button>
@@ -196,7 +196,7 @@ const LenderForm = () => {
                       value={formData.category}
                       onChange={handleInputChange}
                       required
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     >
                       <option value="">Select Category</option>
                       <option value="fashion">Fashion</option>
@@ -214,7 +214,7 @@ const LenderForm = () => {
                         value={formData.productType}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       >
                         <option value="">Select Type</option>
                         {productTypes[formData.category].map(type => (
@@ -233,7 +233,7 @@ const LenderForm = () => {
                       value={formData.productName}
                       onChange={handleInputChange}
                       required
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     />
                   </div>
                   
@@ -246,7 +246,7 @@ const LenderForm = () => {
                       onChange={handleInputChange}
                       required
                       rows={4}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       placeholder="Describe your product in detail including brand, condition, size, etc."
                     ></textarea>
                   </div>
@@ -262,7 +262,7 @@ const LenderForm = () => {
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                      className="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition duration-300"
                     >
                       Next
                     </button>
@@ -286,7 +286,7 @@ const LenderForm = () => {
                         onChange={handleInputChange}
                         required
                         min="0"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
                     
@@ -300,7 +300,7 @@ const LenderForm = () => {
                         onChange={handleInputChange}
                         required
                         min="0"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
                   </div>
@@ -332,7 +332,7 @@ const LenderForm = () => {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300 disabled:opacity-50"
+                      className="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition duration-300 disabled:opacity-50"
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit Product'}
                     </button>

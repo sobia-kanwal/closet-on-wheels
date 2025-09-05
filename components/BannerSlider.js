@@ -40,9 +40,9 @@ const BannerSlider = () => {
       description: "Make your events special with our rental collection",
       cta: "Discover Events",
       link: "/category/events",
-      bgColor: "bg-purple-50",
+      bgColor: "bg-teal-50",
       pattern: "pattern-squares",
-      patternColor: "text-purple-200"
+      patternColor: "text-teal-200"
     }
   ];
 
@@ -111,10 +111,10 @@ const BannerSlider = () => {
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="w-full md:w-1/2 text-white md:text-gray-800">
               <h2 className="text-4xl font-bold mb-2">{slide.title}</h2>
-              <h3 className="text-xl text-purple-300 md:text-purple-600 mb-4">{slide.subtitle}</h3>
+              <h3 className="text-xl text-teal-300 md:text-teal-600 mb-4">{slide.subtitle}</h3>
               <p className="text-gray-200 md:text-gray-600 mb-6">{slide.description}</p>
               <Link href={slide.link}>
-                <div className="bg-purple-600 text-white px-6 py-3 rounded-sm hover:bg-purple-700 transition duration-300 inline-block cursor-pointer">
+                <div className="bg-teal-600 text-white px-6 py-3 rounded-sm hover:bg-teal-700 transition duration-300 inline-block cursor-pointer">
                   {slide.cta}
                 </div>
               </Link>
@@ -158,7 +158,7 @@ const BannerSlider = () => {
             <div className="w-10 h-1 bg-gray-300/70 rounded-full overflow-hidden">
               {index === currentSlide ? (
                 <div 
-                  className="h-full bg-purple-600 transition-all duration-300 ease-linear"
+                  className="h-full bg-teal-600 transition-all duration-300 ease-linear"
                   style={{ width: `${progress}%` }}
                 ></div>
               ) : null}

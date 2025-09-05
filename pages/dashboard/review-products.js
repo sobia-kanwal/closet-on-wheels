@@ -93,7 +93,7 @@ const ReviewProducts = () => {
         
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
           </div>
         ) : products.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
@@ -133,7 +133,7 @@ const ReviewProducts = () => {
                   
                   <div className="flex justify-between items-center mb-3">
                     <div>
-                      <span className="text-purple-600 font-bold">Rs. {product.rentalPrice}/day</span>
+                      <span className="text-teal-600 font-bold">Rs. {product.rentalPrice}/day</span>
                       <span className="text-gray-400 text-sm line-through ml-2">Rs. {product.price}</span>
                     </div>
                   </div>

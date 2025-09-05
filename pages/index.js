@@ -51,7 +51,7 @@ export default function Home({ initialProducts }) {
         <div className="p-4">
           <h3 className="text-xl font-semibold mb-2 text-gray-800">Fashion</h3>
           <p className="text-gray-600">Rent designer dresses, accessories and more</p>
-          <Link href="/category/fashion" className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-sm hover:bg-purple-700 transition duration-300 w-full inline-block text-center">
+          <Link href="/category/fashion" className="mt-4 bg-teal-600 text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition duration-300 w-full inline-block text-center">
             Explore Fashion
           </Link>
         </div>
@@ -69,7 +69,7 @@ export default function Home({ initialProducts }) {
         <div className="p-4">
           <h3 className="text-xl font-semibold mb-2 text-gray-800">Home Items</h3>
           <p className="text-gray-600">Rent furniture, decor and kitchen appliances</p>
-          <Link href="/category/home" className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-sm hover:bg-purple-700 transition duration-300 w-full inline-block text-center">
+          <Link href="/category/home" className="mt-4 bg-teal-600 text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition duration-300 w-full inline-block text-center">
             Explore Home Items
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default function Home({ initialProducts }) {
         <div className="p-4">
           <h3 className="text-xl font-semibold mb-2 text-gray-800">Events</h3>
           <p className="text-gray-600">Rent equipment and supplies for your events</p>
-          <Link href="/category/events" className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-sm hover:bg-purple-700 transition duration-300 w-full inline-block text-center">
+          <Link href="/category/events" className="mt-4 bg-teal-600 text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition duration-300 w-full inline-block text-center">
             Explore Events
           </Link>
         </div>
@@ -102,24 +102,24 @@ export default function Home({ initialProducts }) {
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">1</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">1</span>
               </div>
               <h3 className="font-semibold text-lg mb-2 text-gray-800">Browse & Select</h3>
               <p className="text-gray-600">Explore our wide range of products and add them to your cart</p>
             </div>
             
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">2</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">2</span>
               </div>
               <h3 className="font-semibold text-lg mb-2 text-gray-800">Choose Rental Period</h3>
               <p className="text-gray-600">Select your rental dates and proceed to checkout</p>
             </div>
             
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">3</span>
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-teal-600 font-bold text-xl">3</span>
               </div>
               <h3 className="font-semibold text-lg mb-2 text-gray-800">Enjoy & Return</h3>
               <p className="text-gray-600">Use the product and return it after your rental period ends</p>

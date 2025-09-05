@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
 import { getSessionUser } from '../../utils/encryption';
+
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProtectedRoute from '../../components/ProtectedRoute.jsx';
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 
 function AdminDashboard() {
   const [products, setProducts] = useState([]);
+
+  
   const [filter, setFilter] = useState('pending');
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [status, setStatus] = useState('approved');
   const router = useRouter();
+  const { user } = useAuth(); // Use the auth context
 
   useEffect(() => {
-    const user = getSessionUser();
-    if (!user || user.role !== 'admin') {
-      router.push('/');
-      return;
-    }
+    // Remove the getSessionUser() check since ProtectedRoute already handles this
     fetchProducts();
   }, [filter]);
 
@@ -162,10 +164,9 @@ function AdminDashboard() {
   );
 }
 
-// Only one default export
 export default function ProtectedAdminDashboard() {
   return (
-    <ProtectedRoute requireAdmin={false}>
+    <ProtectedRoute requireAdmin={true}>
       <AdminDashboard />
     </ProtectedRoute>
   );
