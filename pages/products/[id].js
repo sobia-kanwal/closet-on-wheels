@@ -75,7 +75,7 @@ const ProductDetail = () => {
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`relative h-20 bg-gray-200 rounded-md overflow-hidden ${
-                    selectedImage === index ? 'ring-2 ring-purple-500' : ''
+                    selectedImage === index ? 'ring-2 ring-teal-500' : ''
                   }`}
                 >
                   <Image
@@ -107,7 +107,7 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-6">
-              <span className="text-2xl font-bold text-purple-600">Rs. {product.rentalPrice}/day</span>
+              <span className="text-2xl font-bold text-teal-600">Rs. {product.rentalPrice}/day</span>
               <span className="text-gray-400 text-sm line-through ml-2">Rs. {product.price}</span>
             </div>
 
@@ -160,7 +160,7 @@ const ProductDetail = () => {
 
               <div className="flex justify-between items-center mb-6">
                 <span className="text-lg font-semibold text-gray-800">Total</span>
-                <span className="text-2xl font-bold text-purple-600">Rs. {totalPrice}</span>
+                <span className="text-2xl font-bold text-teal-600">Rs. {totalPrice}</span>
               </div>
 
               <button className="btn-primary w-full py-3 text-lg">

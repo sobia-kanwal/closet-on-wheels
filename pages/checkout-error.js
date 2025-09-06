@@ -100,7 +100,7 @@ const CheckoutError = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <svg className="w-6 h-6 text-purple-600 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-6 h-6 text-teal-600 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                   </svg>
                   <span className="font-medium text-gray-800">Call Us: </span>
@@ -108,7 +108,7 @@ const CheckoutError = () => {
                 </div>
                 
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <svg className="w-6 h-6 text-purple-600 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-6 h-6 text-teal-600 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
                   <span className="font-medium text-gray-800">Email Us: </span>
@@ -150,7 +150,7 @@ const CheckoutError = () => {
                   </div>
                   <div className="flex justify-between pt-2 border-t border-gray-200">
                     <span className="text-lg font-semibold text-gray-800">Total</span>
-                    <span className="text-lg font-semibold text-purple-600">
+                    <span className="text-lg font-semibold text-teal-600">
                       Rs. {(cartItems.reduce((sum, item) => sum + item.total, 0) * 1.05).toLocaleString()}
                     </span>
                   </div>
@@ -163,7 +163,7 @@ const CheckoutError = () => {
 
       <style jsx>{`
         .btn-primary {
-          background-color: #8b5cf6;
+          background-color: #008994;
           color: white;
           font-weight: 600;
           border-radius: 0.375rem;
@@ -174,9 +174,9 @@ const CheckoutError = () => {
         }
         .btn-outline {
           background-color: white;
-          color: #8b5cf6;
+          color: #008994;
           font-weight: 600;
-          border: 1px solid #8b5cf6;
+          border: 1px solid #008994;
           border-radius: 0.375rem;
           transition: all 0.2s;
         }

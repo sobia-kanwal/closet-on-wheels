@@ -1,353 +1,290 @@
-// File: pages/lender-form.js
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { getSessionUser } from '../utils/encryption';
+import ProtectedRoute from '../components/ProtectedRoute.jsx';
 
-const LenderForm = () => {
+export function LenderForm() {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    category: '',
-    productType: '',
-    productName: '',
     description: '',
+    brand: '',
+    size: '',
+    condition: 'excellent',
     price: '',
     rentalPrice: '',
-    images: [],
-    availability: []
+    forSale: false,
+    sellingPrice: '',
+    productLink: '',
+    images: []
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const router = useRouter();
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleNext = () => {
-    setCurrentStep(currentStep + 1);
-  };
-
-  const handleBack = () => {
-    setCurrentStep(currentStep - 1);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Here you would submit the form data to your API
-    console.log('Form submitted:', formData);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert('Your product has been submitted for review!');
-    }, 2000);
-  };
+    setLoading(true);
+    setError('');
+    setSuccess('');
 
-  const productTypes = {
-    fashion: ['Dresses', 'Accessories', 'Footwear', 'Jewelry', 'Handbags'],
-    home: ['Furniture', 'Decor', 'Kitchen Appliances', 'Electronics', 'Gardening'],
-    events: ['Wedding', 'Party', 'Corporate', 'Photography', 'Audio/Visual']
+    // Check if user is logged in
+    const user = getSessionUser();
+    if (!user) {
+      setError('Please log in to submit a product');
+      setLoading(false);
+      router.push('/auth');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess('Product submitted successfully! It will be reviewed by our team.');
+        setFormData({
+          name: '',
+          description: '',
+          brand: '',
+          size: '',
+          condition: 'excellent',
+          price: '',
+          rentalPrice: '',
+          forSale: false,
+          sellingPrice: '',
+          productLink: '',
+          images: []
+        });
+      } else {
+        setError(data.message || 'Failed to submit product');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="container mx-auto px-4 py-8">
       <Head>
-        <title>List Your Product - Closet on Wheels</title>
-        <meta name="description" content="List your product for rental on Closet on Wheels" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Become a Lender - Closet on Wheels</title>
       </Head>
 
-      <main className="flex-grow bg-gray-50 py-12">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
-            <h1 className="text-3xl font-bold text-center mb-2">List Your Product</h1>
-            <p className="text-gray-600 text-center mb-8">Fill out the form below to start renting your items</p>
-            
-            {/* Progress Steps */}
-            <div className="mb-8">
-              <div className="flex justify-between mb-2">
-                <div className={`text-sm font-medium ${currentStep >= 1 ? 'text-purple-600' : 'text-gray-500'}`}>Personal Info</div>
-                <div className={`text-sm font-medium ${currentStep >= 2 ? 'text-purple-600' : 'text-gray-500'}`}>Product Details</div>
-                <div className={`text-sm font-medium ${currentStep >= 3 ? 'text-purple-600' : 'text-gray-500'}`}>Pricing & Availability</div>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div 
-                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-300" 
-                  style={{ width: `${(currentStep / 3) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-            
-            <form onSubmit={handleSubmit}>
-              {/* Step 1: Personal Information */}
-              {currentStep === 1 && (
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                      <select
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      >
-                        <option value="">Select City</option>
-                        <option value="karachi">Karachi</option>
-                        <option value="lahore">Lahore</option>
-                        <option value="islamabad">Islamabad</option>
-                        <option value="rawalpindi">Rawalpindi</option>
-                        <option value="peshawar">Peshawar</option>
-                        <option value="quetta">Quetta</option>
-                        <option value="faisalabad">Faisalabad</option>
-                        <option value="multan">Multan</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Full Address</label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                      rows={3}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    ></textarea>
-                  </div>
-                  
-                  <div className="flex justify-end mt-6">
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {/* Step 2: Product Details */}
-              {currentStep === 2 && (
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold mb-4">Product Details</h2>
-                  
-                  <div>
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    >
-                      <option value="">Select Category</option>
-                      <option value="fashion">Fashion</option>
-                      <option value="home">Home Items</option>
-                      <option value="events">Events</option>
-                    </select>
-                  </div>
-                  
-                  {formData.category && (
-                    <div>
-                      <label htmlFor="productType" className="block text-sm font-medium text-gray-700 mb-1">Product Type</label>
-                      <select
-                        id="productType"
-                        name="productType"
-                        value={formData.productType}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      >
-                        <option value="">Select Type</option>
-                        {productTypes[formData.category].map(type => (
-                          <option key={type} value={type.toLowerCase()}>{type}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                  
-                  <div>
-                    <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                    <input
-                      type="text"
-                      id="productName"
-                      name="productName"
-                      value={formData.productName}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea
-                      id="description"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      required
-                      rows={4}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      placeholder="Describe your product in detail including brand, condition, size, etc."
-                    ></textarea>
-                  </div>
-                  
-                  <div className="flex justify-between mt-6">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition duration-300"
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {/* Step 3: Pricing & Availability */}
-              {currentStep === 3 && (
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold mb-4">Pricing & Availability</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Original Price (PKR)</label>
-                      <input
-                        type="number"
-                        id="price"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        required
-                        min="0"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="rentalPrice" className="block text-sm font-medium text-gray-700 mb-1">Daily Rental Price (PKR)</label>
-                      <input
-                        type="number"
-                        id="rentalPrice"
-                        name="rentalPrice"
-                        value={formData.rentalPrice}
-                        onChange={handleInputChange}
-                        required
-                        min="0"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Product Images</label>
-                    <div className="flex items-center justify-center w-full">
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                          </svg>
-                          <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                          <p className="text-xs text-gray-500">PNG, JPG, GIF (MAX. 5MB each)</p>
-                        </div>
-                        <input id="dropzone-file" type="file" className="hidden" multiple />
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between mt-6">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition duration-300"
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-300 disabled:opacity-50"
-                    >
-                      {isSubmitting ? 'Submitting...' : 'Submit Product'}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </form>
+      <h1 className="text-3xl font-bold mb-6">List Your Product</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+      
+      {success && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          {success}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              Product Name *
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              value={formData.name}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
+              Brand *
+            </label>
+            <input
+              type="text"
+              id="brand"
+              name="brand"
+              required
+              value={formData.brand}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="size" className="block text-sm font-medium text-gray-700">
+              Size *
+            </label>
+            <input
+              type="text"
+              id="size"
+              name="size"
+              required
+              value={formData.size}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              placeholder="e.g., S, M, L, 10, 12, etc."
+            />
+          </div>
+
+          <div>
+            <label htmlFor="condition" className="block text-sm font-medium text-gray-700">
+              Condition *
+            </label>
+            <select
+              id="condition"
+              name="condition"
+              required
+              value={formData.condition}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="excellent">Excellent</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="rentalPrice" className="block text-sm font-medium text-gray-700">
+              Rental Price (per day) *
+            </label>
+            <input
+              type="number"
+              id="rentalPrice"
+              name="rentalPrice"
+              required
+              min="0"
+              step="0.01"
+              value={formData.rentalPrice}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Original Price *
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              required
+              min="0"
+              step="0.01"
+              value={formData.price}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="productLink" className="block text-sm font-medium text-gray-700">
+              Product Link (optional)
+            </label>
+            <input
+              type="url"
+              id="productLink"
+              name="productLink"
+              value={formData.productLink}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              placeholder="https://..."
+            />
           </div>
         </div>
-      </main>
 
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            Description *
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            rows={4}
+            value={formData.description}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div className="flex items-center">
+          <input
+            id="forSale"
+            name="forSale"
+            type="checkbox"
+            checked={formData.forSale}
+            onChange={handleChange}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label htmlFor="forSale" className="ml-2 block text-sm text-gray-900">
+            Also available for sale
+          </label>
+        </div>
+
+        {formData.forSale && (
+          <div>
+            <label htmlFor="sellingPrice" className="block text-sm font-medium text-gray-700">
+              Selling Price *
+            </label>
+            <input
+              type="number"
+              id="sellingPrice"
+              name="sellingPrice"
+              required={formData.forSale}
+              min="0"
+              step="0.01"
+              value={formData.sellingPrice}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        )}
+
+        <div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          >
+            {loading ? 'Submitting...' : 'Submit for Review'}
+          </button>
+        </div>
+      </form>
     </div>
   );
-};
+}
 
-export default LenderForm;
+export default function ProtectedLenderForm() {
+  return (
+    <ProtectedRoute>
+      <LenderForm />
+    </ProtectedRoute>
+  );
+}

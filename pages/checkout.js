@@ -307,14 +307,14 @@ const Checkout = () => {
                   <h2 className="text-xl font-semibold mb-4 text-gray-800">Payment Method</h2>
                   
                   <div className="space-y-3">
-                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-purple-500">
+                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="credit-card"
                         checked={formData.paymentMethod === 'credit-card'}
                         onChange={handleInputChange}
-                        className="text-purple-600 focus:ring-purple-500"
+                        className="text-teal-600 focus:ring-teal-500"
                       />
                       <span className="ml-3 text-gray-700">Credit/Debit Card</span>
                     </label>
@@ -373,14 +373,14 @@ const Checkout = () => {
                       </div>
                     )}
                     
-                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-purple-500">
+                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="jazzcash"
                         checked={formData.paymentMethod === 'jazzcash'}
                         onChange={handleInputChange}
-                        className="text-purple-600 focus:ring-purple-500"
+                        className="text-teal-600 focus:ring-teal-500"
                       />
                       <span className="ml-3 text-gray-700">JazzCash</span>
                     </label>
@@ -403,14 +403,14 @@ const Checkout = () => {
                       </div>
                     )}
                     
-                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-purple-500">
+                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="easypaisa"
                         checked={formData.paymentMethod === 'easypaisa'}
                         onChange={handleInputChange}
-                        className="text-purple-600 focus:ring-purple-500"
+                        className="text-teal-600 focus:ring-teal-500"
                       />
                       <span className="ml-3 text-gray-700">EasyPaisa</span>
                     </label>
@@ -433,14 +433,14 @@ const Checkout = () => {
                       </div>
                     )}
                     
-                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-purple-500">
+                    <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="cash"
                         checked={formData.paymentMethod === 'cash'}
                         onChange={handleInputChange}
-                        className="text-purple-600 focus:ring-purple-500"
+                        className="text-teal-600 focus:ring-teal-500"
                       />
                       <span className="ml-3 text-gray-700">Cash on Delivery</span>
                     </label>
@@ -498,7 +498,7 @@ const Checkout = () => {
                 
                 <div className="flex justify-between border-t border-gray-200 pt-3">
                   <span className="text-lg font-semibold text-gray-800">Total</span>
-                  <span className="text-lg font-semibold text-purple-600">
+                  <span className="text-lg font-semibold text-teal-600">
                     Rs. {(formData.paymentMethod === 'cash' ? orderTotal + 100 : orderTotal).toLocaleString()}
                   </span>
                 </div>
@@ -511,7 +511,7 @@ const Checkout = () => {
                   {cart.map(item => (
                     <div key={item.id} className="flex items-center">
                       <div className="w-12 h-12 bg-gray-200 rounded-md overflow-hidden mr-3 flex items-center justify-center">
-                        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-teal-100 to-blue-100 flex items-center justify-center">
                           <span className="text-gray-500 text-xs">Image</span>
                         </div>
                       </div>
@@ -541,11 +541,11 @@ const Checkout = () => {
         .input-field:focus {
           outline: none;
           ring: 2px;
-          ring-color: #8b5cf6;
-          border-color: #8b5cf6;
+          ring-color: #008994;
+          border-color: #008994;
         }
         .btn-primary {
-          background-color: #8b5cf6;
+          background-color: #008994;
           color: white;
           font-weight: 600;
           border-radius: 0.375rem;
