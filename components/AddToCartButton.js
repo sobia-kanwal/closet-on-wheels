@@ -30,7 +30,7 @@ const AddToCartButton = ({ product, variant = 'primary' }) => {
   };
 
   const buttonClass = variant === 'primary' 
-    ? 'bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 disabled:opacity-50'
+    ? 'bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 disabled:opacity-50'
     : 'bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 disabled:opacity-50';
 
   return (

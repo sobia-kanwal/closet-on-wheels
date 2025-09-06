@@ -37,7 +37,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #a855f7;
+  background: #008994;
   border-radius: 4px;
 }
 
@@ -47,7 +47,7 @@ a {
 
 /* Custom utility classes */
 .btn-primary {
-  @apply bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300;
+  @apply bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition duration-300;
 }
 
 .btn-secondary {
@@ -55,7 +55,7 @@ a {
 }
 
 .input-field {
-  @apply w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500;
+  @apply w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-teal-500;
 }
 
 .card {
@@ -80,7 +80,7 @@ a {
 
 /* File input styling */
 input[type="file"]::file-selector-button {
-  background-color: #8B5CF6;
+  background-color: #008994;
   color: white;
   border: none;
   padding: 0.5rem 1rem;

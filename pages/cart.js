@@ -59,7 +59,7 @@ const Cart = () => {
                     {cart.map(item => (
                       <li key={item.id} className="py-6 flex">
                         <div className="flex-shrink-0 w-24 h-24 bg-gray-200 rounded-md overflow-hidden flex items-center justify-center">
-                          <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                          <div className="w-full h-full bg-gradient-to-br from-teal-100 to-blue-100 flex items-center justify-center">
                             <span className="text-gray-500 text-xs">Product Image</span>
                           </div>
                         </div>
@@ -138,7 +138,7 @@ const Cart = () => {
                   
                   <div className="flex justify-between border-t border-gray-200 pt-3">
                     <span className="text-lg font-semibold text-gray-800">Total</span>
-                    <span className="text-lg font-semibold text-purple-600">
+                    <span className="text-lg font-semibold text-teal-600">
                       Rs. {(getCartTotal() * 1.05).toLocaleString()}
                     </span>
                   </div>
@@ -149,7 +149,7 @@ const Cart = () => {
                 </Link>
                 
                 <div className="mt-4 flex justify-center text-sm text-center text-gray-500">
-                  <Link href="/" className="text-purple-600 font-medium hover:text-purple-500">
+                  <Link href="/" className="text-teal-600 font-medium hover:text-teal-500">
                     Continue Shopping
                   </Link>
                 </div>
@@ -162,7 +162,7 @@ const Cart = () => {
       <style jsx>{`
         .btn-primary {
           display: block;
-          background-color: #8b5cf6;
+          background-color: #008994;
           color: white;
           font-weight: 600;
           padding: 0.75rem 1rem;
@@ -176,11 +176,11 @@ const Cart = () => {
         .btn-outline {
           display: block;
           background-color: white;
-          color: #8b5cf6;
+          color: #008994;
           font-weight: 600;
           padding: 0.75rem 1rem;
           border-radius: 0.375rem;
-          border: 1px solid #8b5cf6;
+          border: 1px solid #008994;
           transition: all 0.2s;
           text-align: center;
         }

@@ -30,7 +30,7 @@ const AddToWishlistButton = ({ product, showText = false }) => {
     return (
       <button 
         onClick={handleToggleWishlist}
-        className="flex items-center text-gray-600 hover:text-purple-600"
+        className="flex items-center text-gray-600 hover:text-teal-600"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 

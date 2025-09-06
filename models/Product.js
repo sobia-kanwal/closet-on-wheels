@@ -1,55 +1,68 @@
-// models/Product.js
 import mongoose from 'mongoose';
 
-const ProductSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    required: true,
+    required: true
+  },
+  brand: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: String,
+    required: true
+  },
+  condition: {
+    type: String,
+    required: true
   },
   price: {
     type: Number,
-    required: true,
+    required: true
   },
   rentalPrice: {
     type: Number,
-    required: true,
+    required: true
   },
-  category: {
-    type: String,
-    required: true,
-    enum: ['fashion', 'home', 'events'],
+  forSale: {
+    type: Boolean,
+    default: false
   },
-  productType: {
-    type: String,
-    required: true,
+  sellingPrice: {
+    type: Number
+  },
+  productLink: {
+    type: String
   },
   images: [{
-    type: String,
+    type: String
   }],
-  location: {
-    type: String,
-    required: true,
-  },
-  availability: {
-    startDate: Date,
-    endDate: Date,
-  },
-  lender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'rented'],
-    default: 'active',
+    enum: ['pending', 'approved', 'needs_improvement', 'rejected'],
+    default: 'pending'
   },
-}, {
-  timestamps: true,
+  adminFeedback: {
+    type: String
+  },
+  lenderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-export default mongoose.models.Product || mongoose.model('Product', ProductSchema);
+export default mongoose.models.Product || mongoose.model('Product', productSchema);

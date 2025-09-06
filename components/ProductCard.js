@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
             <h3 className="text-lg font-semibold text-gray-800 mb-1">{product.name}</h3>
             <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-purple-600">PKR {product.price}/day</span>
+              <span className="text-lg font-bold text-teal-600">PKR {product.price}/day</span>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                 {product.category}
               </span>

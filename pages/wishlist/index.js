@@ -83,7 +83,7 @@ const WishlistPage = () => {
               <button
                 onClick={handleMoveAllToCart}
                 disabled={loading}
-                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 disabled:opacity-50"
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 disabled:opacity-50"
               >
                 {loading ? 'Moving...' : 'Move All to Cart'}
               </button>
@@ -110,7 +110,7 @@ const WishlistPage = () => {
               <p className="mt-1 text-gray-500">Start adding items you love to your wishlist.</p>
               <div className="mt-6">
                 <Link href="/">
-                  <div className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 cursor-pointer">
+                  <div className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 cursor-pointer">
                     Continue Shopping
                   </div>
                 </Link>
@@ -149,11 +149,11 @@ const WishlistPage = () => {
                     <h3 className="text-lg font-semibold text-gray-800 mb-1">{item.name}</h3>
                     <p className="text-gray-600 text-sm mb-3">{item.description}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-purple-600">PKR {item.price}/day</span>
+                      <span className="text-lg font-bold text-teal-600">PKR {item.price}/day</span>
                       <button
                         onClick={() => handleAddToCart(item)}
                         disabled={loading && selectedItem === item.id}
-                        className="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700 disabled:opacity-50"
+                        className="bg-teal-600 text-white px-3 py-1 rounded text-sm hover:bg-teal-700 disabled:opacity-50"
                       >
                         {loading && selectedItem === item.id ? 'Adding...' : 'Add to Cart'}
                       </button>

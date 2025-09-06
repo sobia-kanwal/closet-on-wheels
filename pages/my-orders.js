@@ -48,7 +48,7 @@ const MyOrders = () => {
       case 'confirmed':
         return 'bg-blue-100 text-blue-800';
       case 'shipped':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-teal-100 text-teal-800';
       case 'delivered':
         return 'bg-green-100 text-green-800';
       case 'cancelled':
@@ -68,7 +68,7 @@ const MyOrders = () => {
       <>
         <MainHeader />
         <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
         </div>
       </>
     );
@@ -92,7 +92,7 @@ const MyOrders = () => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => setFilter('all')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${filter === 'all' ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${filter === 'all' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
                 >
                   All Orders
                 </button>
@@ -104,7 +104,7 @@ const MyOrders = () => {
                 </button>
                 <button
                   onClick={() => setFilter('shipped')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${filter === 'shipped' ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${filter === 'shipped' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
                 >
                   Shipped
                 </button>
@@ -175,7 +175,7 @@ const MyOrders = () => {
                             {order.items.map(item => (
                               <div key={item.id} className="flex items-center">
                                 <div className="w-16 h-16 bg-gray-200 rounded-md overflow-hidden mr-4 flex items-center justify-center">
-                                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                                  <div className="w-full h-full bg-gradient-to-br from-teal-100 to-blue-100 flex items-center justify-center">
                                     <span className="text-gray-500 text-xs">Image</span>
                                   </div>
                                 </div>
@@ -210,7 +210,7 @@ const MyOrders = () => {
                               )}
                               <div className="flex justify-between pt-2 border-t border-gray-200">
                                 <span className="font-semibold text-gray-800">Total</span>
-                                <span className="font-semibold text-purple-600">Rs. {order.total.toLocaleString()}</span>
+                                <span className="font-semibold text-teal-600">Rs. {order.total.toLocaleString()}</span>
                               </div>
                             </div>
                           </div>
@@ -247,7 +247,7 @@ const MyOrders = () => {
                           </button>
                         )}
                         {order.status === 'delivered' && (
-                          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700">
+                          <button className="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700">
                             Rent Again
                           </button>
                         )}
@@ -263,7 +263,7 @@ const MyOrders = () => {
 
       <style jsx>{`
         .btn-primary {
-          background-color: #8b5cf6;
+          background-color: #008994;
           color: white;
           font-weight: 600;
           padding: 0.75rem 1.5rem;
@@ -275,11 +275,11 @@ const MyOrders = () => {
         }
         .btn-outline {
           background-color: white;
-          color: #8b5cf6;
+          color: #008994;
           font-weight: 600;
           padding: 0.5rem 1rem;
           border-radius: 0.375rem;
-          border: 1px solid #8b5cf6;
+          border: 1px solid #008994;
           transition: all 0.2s;
         }
         .btn-outline:hover {
