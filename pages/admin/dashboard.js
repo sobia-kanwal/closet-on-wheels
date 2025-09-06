@@ -1,7 +1,4 @@
 import { useState, useEffect } from 'react';
-import { getSessionUser } from '../../utils/encryption';
-
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProtectedRoute from '../../components/ProtectedRoute.jsx';
 import { useAuth } from '../../context/AuthContext'; // Import useAuth
