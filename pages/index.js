@@ -84,7 +84,7 @@ export default function Home({ initialProducts }) {
             className="object-cover"
           />
         </div>
-        <div className="p-4">
+               <div className="p-4">
           <h3 className="text-xl font-semibold mb-2 text-gray-800">Events</h3>
           <p className="text-gray-600">Rent equipment and supplies for your events</p>
           <Link href="/category/events" className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-sm hover:bg-purple-700 transition duration-300 w-full inline-block text-center">
