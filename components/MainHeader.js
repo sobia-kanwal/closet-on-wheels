@@ -292,7 +292,7 @@ const MainHeader = () => {
               <div className="font-medium text-gray-700 hover:text-teal-600 cursor-pointer text-sm uppercase tracking-wide py-2">Contact</div>
             </Link>
             <Link href="/become-a-lender" onClick={closeAllDropdowns}>
-              <div className="hidden md:block bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition duration-300 cursor-pointer font-medium">
+              <div className="hidden md:block text-teal-700 px-4 py-2 rounded-md hover:text-teal-800 transition duration-300 cursor-pointer font-medium">
                 Become a Lender
               </div>
             </Link>
