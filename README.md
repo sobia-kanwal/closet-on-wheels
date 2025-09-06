@@ -64,13 +64,6 @@ Note: Keep secrets out of version control.
 - `/styles` — Global CSS and Tailwind config
 - `/public` — Static assets
 
-## Key Routes
-- Web: `/`, `/products/[id]`, `/category/[category]`, `/wishlist`, `/cart`, `/checkout`, `/order-confirmation`
-- Auth: `/auth`
-- Lender: `/become-a-lender`, `/my-listings`
-- Admin: `/dashboard/review-products`
-- API: `/pages/api/*` (products, orders, auth, admin)
-
 ## Development Notes
 - Ensure MongoDB is reachable and env vars are set before running.
 - Update Tailwind styles in `tailwind.config.js` and `styles/globals.css`.
