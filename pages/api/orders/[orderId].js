@@ -1,5 +1,5 @@
 // pages/api/orders/[orderId].js
-import connectDB from '../../../lib/mongodb';
+import prisma from '@/lib/db';
 import Order from '../../../models/Order';
 
 export default async function handler(req, res) {
@@ -10,8 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    await connectDB();
-    const order = await Order.findOne({ orderId });
+    const order = await prisma.order.findUnique({ orderId });
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });

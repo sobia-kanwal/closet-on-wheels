@@ -1,4 +1,4 @@
-import connectDB from '../../../lib/mongodb';
+import prisma from '@/lib/db';
 import User from '../../../models/User';
 
 export default async function handler(req, res) {
@@ -6,19 +6,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  try {
-    await connectDB();
-    
+  try {    
     const { name, email, password } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     // Create new user
-    const user = await User.create({ name, email, password });
+    const user = await prisma.user.create({ name, email, password });
 
     // Remove password from response
     const userResponse = {

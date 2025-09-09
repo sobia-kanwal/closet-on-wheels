@@ -1,65 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  password   String? // bcrypt-hashed, nullable for social login
-  image      String? // profile picture
-  role       Role     @default(USER)
-  provider   String? // google, facebook, credentials
-  providerId String? // external provider id
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  // Relations
-  products   Product[] // items user lends
-  rentals    Rental[] // items user rents
-  reviews    Review[] // user reviews
-  activities UserActivity[]
-}
-
-enum Role {
-  USER
-  ADMIN
+  id           Int            @id @default(autoincrement())
+  name         String
+  email        String         @unique
+  password     String?
+  image        String?
+  role         Role           @default(USER)
+  provider     String?
+  providerId   String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  cartItems    CartItem[]
+  products     Product[]
+  rentals      Rental[]
+  reviews      Review[]
+  activities   UserActivity[]
+  wishlistItem WishlistItem[]
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
-  title       String
-  description String
-  brand       String?
-  category    String?
-  size        String?
-  color       String?
-  price       Float
-  rentalPrice Float?
-  images      String[]
-  status      ProductStatus @default(PENDING)
-  feedback    String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-
-  // Relations
-  ownerId    Int
-  owner      User           @relation(fields: [ownerId], references: [id])
-  rentals    Rental[]
-  reviews    Review[]
-  activities UserActivity[] // <-- Add this line
-}
-
-enum ProductStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  RENTED
+  id             Int            @id @default(autoincrement())
+  title          String
+  description    String
+  brand          String
+  category       String
+  size           String
+  color          String
+  price          Float
+  rentalPrice    Float?
+  images         String[]
+  feedback       String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  ownerId        Int
+  status         String         @default("PENDING")
+  cartItems      CartItem[]
+  owner          User           @relation(fields: [ownerId], references: [id])
+  rentals        Rental[]
+  reviews        Review[]
+  userActivities UserActivity[]
+  wishlistItem   WishlistItem[]
 }
 
 model Rental {
@@ -69,12 +57,63 @@ model Rental {
   totalPrice Float
   status     RentalStatus @default(RESERVED)
   createdAt  DateTime     @default(now())
+  productId  Int
+  renterId   Int
+  product    Product      @relation(fields: [productId], references: [id])
+  renter     User         @relation(fields: [renterId], references: [id])
+}
 
-  // Relations
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  renterId  Int
-  renter    User    @relation(fields: [renterId], references: [id])
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model UserActivity {
+  id        Int          @id @default(autoincrement())
+  type      ActivityType
+  createdAt DateTime     @default(now())
+  userId    Int
+  productId Int
+  product   Product      @relation(fields: [productId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model WishlistItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RENTED
 }
 
 enum RentalStatus {
@@ -82,29 +121,6 @@ enum RentalStatus {
   ACTIVE
   COMPLETED
   CANCELLED
-}
-
-model Review {
-  id        Int      @id @default(autoincrement())
-  rating    Int // 1–5 stars
-  comment   String?
-  createdAt DateTime @default(now())
-
-  // Relations
-  userId    Int
-  user      User    @relation(fields: [userId], references: [id])
-}
-
-model UserActivity {
-  id        Int          @id @default(autoincrement())
-  type      ActivityType
-  createdAt DateTime     @default(now())
-
-  // Relations
-  userId    Int
-  user      User    @relation(fields: [userId], references: [id])
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
 }
 
 enum ActivityType {

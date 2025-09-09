@@ -138,7 +138,7 @@ export default function Home({ initialProducts }) {
 }
 // In your index.js, update the initialProducts data:
 export async function getServerSideProps() {
-  // This would fetch from your MongoDB in production
+  // This would fetch from your PostgreSQL in production
   const initialProducts = [
     {
       id: 1,

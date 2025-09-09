@@ -1,127 +1,87 @@
-// context/CartContext.js
-import { createContext, useContext, useState, useEffect } from 'react';
-import { db } from '../lib/db';
+"use client";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const CartContext = createContext();
 
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
-};
-
-export const CartProvider = ({ children }) => {
+export function CartProvider({ children }) {
+  const { data: session } = useSession();
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  const [wishlist, setWishlist] = useState([]);
-  const [wishlistCount, setWishlistCount] = useState(0);
 
-  // Load cart and wishlist from database on component mount
+  // Load cart (localStorage or DB depending on login)
+  const loadCart = async () => {
+    if (session?.user) {
+      // Logged in → get from DB
+      const res = await fetch("/api/cart");
+      if (res.ok) {
+        const data = await res.json();
+        setCart(data);
+        setCartCount(data.reduce((t, item) => t + item.quantity, 0));
+      }
+    } else {
+      // Guest → load from localStorage
+      const data = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCart(data);
+      setCartCount(data.reduce((t, item) => t + item.quantity, 0));
+    }
+  };
+
+  const addToCart = async (productId, quantity = 1) => {
+    if (session?.user) {
+      // Logged in → save to DB
+      await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, quantity }),
+      });
+    } else {
+      // Guest → save to localStorage
+      const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+      const existing = stored.find((item) => item.productId === productId);
+      let updated;
+      if (existing) {
+        updated = stored.map((i) =>
+          i.productId === productId
+            ? { ...i, quantity: i.quantity + quantity }
+            : i
+        );
+      } else {
+        updated = [...stored, { productId, quantity }];
+      }
+      localStorage.setItem("cart", JSON.stringify(updated));
+    }
+    await loadCart();
+  };
+
+  const removeFromCart = async (idOrProductId) => {
+    if (session?.user) {
+      // Logged in → delete from DB
+      await fetch("/api/cart", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: idOrProductId }),
+      });
+    } else {
+      // Guest → delete from localStorage
+      const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+      const updated = stored.filter((item) => item.productId !== idOrProductId);
+      localStorage.setItem("cart", JSON.stringify(updated));
+    }
+    await loadCart();
+  };
+
   useEffect(() => {
-    const loadCart = () => {
-      const cartItems = db.cart.get();
-      setCart(cartItems);
-      setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
-    };
-
-    const loadWishlist = () => {
-      const wishlistItems = db.wishlist.get();
-      setWishlist(wishlistItems);
-      setWishlistCount(wishlistItems.length);
-    };
-
     loadCart();
-    loadWishlist();
-  }, []);
-
-  // Cart functions
-  const addToCart = (product) => {
-    const updatedCart = db.cart.add(product);
-    setCart(updatedCart);
-    setCartCount(updatedCart.reduce((total, item) => total + item.quantity, 0));
-    return updatedCart;
-  };
-
-  const updateCartItem = (productId, updates) => {
-    const updatedCart = db.cart.update(productId, updates);
-    setCart(updatedCart);
-    setCartCount(updatedCart.reduce((total, item) => total + item.quantity, 0));
-    return updatedCart;
-  };
-
-  const removeFromCart = (productId) => {
-    const updatedCart = db.cart.remove(productId);
-    setCart(updatedCart);
-    setCartCount(updatedCart.reduce((total, item) => total + item.quantity, 0));
-    return updatedCart;
-  };
-
-  const clearCart = () => {
-    const updatedCart = db.cart.clear();
-    setCart(updatedCart);
-    setCartCount(0);
-    return updatedCart;
-  };
-
-  const getCartTotal = () => {
-    return cart.reduce((total, item) => total + item.total, 0);
-  };
-
-  // Wishlist functions
-  const addToWishlist = (product) => {
-    const updatedWishlist = db.wishlist.add(product);
-    setWishlist(updatedWishlist);
-    setWishlistCount(updatedWishlist.length);
-    return updatedWishlist;
-  };
-
-  const removeFromWishlist = (productId) => {
-    const updatedWishlist = db.wishlist.remove(productId);
-    setWishlist(updatedWishlist);
-    setWishlistCount(updatedWishlist.length);
-    return updatedWishlist;
-  };
-
-  const isInWishlist = (productId) => {
-    return wishlist.some(item => item.id === productId);
-  };
-
-  const clearWishlist = () => {
-    const updatedWishlist = db.wishlist.clear();
-    setWishlist(updatedWishlist);
-    setWishlistCount(0);
-    return updatedWishlist;
-  };
-
-  // Combined function to add to cart and remove from wishlist
-  const addToCartAndRemoveFromWishlist = (product) => {
-    const updatedCart = addToCart(product);
-    removeFromWishlist(product.id);
-    return updatedCart;
-  };
-
-  const value = {
-    cart,
-    cartCount,
-    wishlist,
-    wishlistCount,
-    addToCart,
-    updateCartItem,
-    removeFromCart,
-    clearCart,
-    getCartTotal,
-    addToWishlist,
-    removeFromWishlist,
-    isInWishlist,
-    clearWishlist,
-    addToCartAndRemoveFromWishlist // New function
-  };
+  }, [session]);
 
   return (
-    <CartContext.Provider value={value}>
+    <CartContext.Provider
+      value={{ cart, cartCount, addToCart, removeFromCart, reload: loadCart }}
+    >
       {children}
     </CartContext.Provider>
   );
-};
+}
+
+export const useCart = () => useContext(CartContext);

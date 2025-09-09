@@ -1,5 +1,5 @@
 // pages/api/orders/create.js
-import connectDB from '../../../lib/mongodb';
+import prisma from '@/lib/db';
 import Order from '../../../models/Order';
 
 export default async function handler(req, res) {
@@ -8,8 +8,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    await connectDB();
-
     // Validate required fields
     const requiredFields = ['customer', 'items', 'subtotal', 'tax', 'total', 'paymentMethod'];
     for (const field of requiredFields) {
@@ -69,7 +67,7 @@ export default async function handler(req, res) {
       });
     }
     
-    if (error.name === 'MongoError' && error.code === 11000) {
+    if (error.name === 'DBError' && error.code === 11000) {
       return res.status(409).json({ 
         success: false, 
         message: 'Order ID already exists' 
