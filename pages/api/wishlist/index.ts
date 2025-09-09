@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const session = await getServerSession(req, res, authOptions);
   if (!session?.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const userId = parseInt(session.user.id);
+  const userId = parseInt((session.user as { id: string }).id);
 
   if (req.method === "GET") {
     // Get all wishlist items for this user

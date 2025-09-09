@@ -1,12 +1,10 @@
 // components/ProductCard.js
 import Link from 'next/link';
-import AddToWishlistButton from './AddToWishlistButton';
 import AddToCartButton from './AddToCartButton'; // Assuming you have this component
 
 const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative">
-      <AddToWishlistButton product={product} />
       
       <Link href={`/products/${product.id}`}>
         <div className="cursor-pointer">
