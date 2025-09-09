@@ -1,9 +1,9 @@
-import dbConnect from '../../../lib/dbConnect';
+import db from '../../../lib/db';
 import Product from '../../../models/Product';
 import { getSessionUser } from '../../../utils/encryption';
 
 export default async function handler(req, res) {
-  await dbConnect();
+  await db();
 
   const user = getSessionUser();
   if (!user || user.role !== 'admin') {
