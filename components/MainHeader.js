@@ -5,13 +5,16 @@ import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Logo from './Logo';
 import { useCart } from '../context/CartContext';
+import { useSession, signOut } from 'next-auth/react';
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const headerRef = useRef(null);
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user: localUser, logout } = useAuth();
+  const { data: session } = useSession();
+  const authUser = localUser || session?.user || null; // prefer local user if present
   const { cartCount, wishlistCount } = useCart(); // Get both cart and wishlist counts
 
   
@@ -75,9 +78,14 @@ const MainHeader = () => {
 
 
   const handleLogout = () => {
-    logout();
-    closeAllDropdowns();
-    router.push('/');
+    // If using NextAuth session, sign out there; otherwise use local logout
+    if (session) {
+      signOut({ callbackUrl: '/' });
+    } else {
+      logout();
+      closeAllDropdowns();
+      router.push('/');
+    }
   };
 
 
@@ -188,7 +196,7 @@ const MainHeader = () => {
             </Link>
 
             {/* User Account or Login */}
-            {user ? (
+            {authUser ? (
               <div className="relative">
                 <button 
                   onClick={() => toggleDropdown('user')}
@@ -201,9 +209,13 @@ const MainHeader = () => {
                 {activeDropdown === 'user' && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-200">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-600">{user.email}</p>
-                      <p className="text-xs text-teal-600 capitalize">{user.type}</p>
+                      <p className="text-sm font-medium text-gray-800">{authUser.name || authUser.email}</p>
+                      {authUser.email && (
+                        <p className="text-xs text-gray-600">{authUser.email}</p>
+                      )}
+                      {authUser.type && (
+                        <p className="text-xs text-teal-600 capitalize">{authUser.type}</p>
+                      )}
                     </div>
                     <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                       Profile
@@ -211,12 +223,12 @@ const MainHeader = () => {
                     <Link href="/my-rentals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                       My Rentals
                     </Link>
-                    {user.type === 'lender' && (
+                    {authUser.type === 'lender' && (
                       <Link href="/my-listings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                         My Listings
                       </Link>
                     )}
-                    {user.type === 'admin' && (
+                    {authUser.type === 'admin' && (
                       <Link href="/dashboard/review-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                         Review Products
                       </Link>
