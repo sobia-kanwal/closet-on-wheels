@@ -1,55 +1,62 @@
-import NextAuth, { type AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import prisma from "../../../lib/db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import bcrypt from "bcrypt";
+import NextAuth, { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import FacebookProvider from "next-auth/providers/facebook";
+import GoogleProvider from "next-auth/providers/google";
 
-// If you extended types via next-auth.d.ts, keep it. Otherwise this still works.
 export const authOptions: AuthOptions = {
-  session: { strategy: "jwt" },
+  adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID as string,
+      clientSecret: process.env.FACEBOOK_SECRET as string,
+    }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" },
       },
-      async authorize(credentials): Promise<any> {
-        if (!credentials?.email || !credentials?.password) return null;
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Invalid credentials");
+        }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: {
+            email: credentials.email,
+          },
         });
-        if (!user || !user.password) return null;
 
-        const ok = await bcrypt.compare(credentials.password, user.password);
-        if (!ok) return null;
+        if (!user || !user?.hashedPassword) {
+          throw new Error("Invalid credentials");
+        }
 
-        // Return minimal safe object. id MUST be a string.
-        return { id: String(user.id), email: user.email, name: user.name, role: user.role };
+        const isCorrectPassword = await bcrypt.compare(
+          credentials.password,
+          user.hashedPassword
+        );
+        if (!isCorrectPassword) {
+          throw new Error("Invalid credentials");
+        }
+        return user;
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      // On sign-in, merge role/id into token
-      if (user) {
-        token.id = (user as any).id;
-        token.role = (user as any).role ?? "USER";
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        // Use either token.id or token.sub (NextAuth sets sub automatically)
-        (session.user as any).id = (token as any).id ?? token.sub ?? "";
-        (session.user as any).role = (token as any).role ?? "USER";
-      }
-      return session;
-    },
+  pages: {
+    signIn: "/",
+  },
+  debug: process.env.NODE_ENV === "development",
+  session: {
+    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  // Useful while debugging:
-  // debug: true,
 };
 
 export default NextAuth(authOptions);
