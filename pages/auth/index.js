@@ -138,8 +138,7 @@ export default function LoginPage() {
 
         {/* Social Login */}
         <div className="space-y-3">
-          <button
-            onClick={() => signIn("google")}
+          <button onClick={() => signIn("google", { prompt: "select_account" })}
             className="w-full border py-3 rounded-xl flex justify-center items-center gap-2 hover:bg-gray-100"
           >
             <FaGoogle className="w-5 h-5 text-red-500" />

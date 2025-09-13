@@ -201,10 +201,17 @@ const MainHeader = () => {
                 <button 
                   onClick={() => toggleDropdown('user')}
                   className="text-gray-600 hover:text-teal-600 flex items-center"
-                >
+                > {authUser?.image ? (
+                 <img
+                   src={authUser.image}
+                   alt="User"
+                   className="w-8 h-8 rounded-full border border-gray-300"
+                 />
+                ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
+                )}
                 </button>
                 {activeDropdown === 'user' && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-200">
