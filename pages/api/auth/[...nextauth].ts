@@ -15,7 +15,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       authorization: {
         params: {
-          prompt: "select_account",
+          prompt: "select_account", // ✅ forces account selector
           access_type: "offline",
           response_type: "code",
         },
@@ -50,41 +50,48 @@ export const authOptions: AuthOptions = {
         );
         if (!isCorrectPassword) throw new Error("Invalid credentials");
 
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image ?? null,
+          role: (user as any).role ?? undefined,
+        };
       },
     }),
   ],
   pages: {
-    signIn: "/auth/index", // point this to your custom login page
+    signIn: "/",
   },
   session: {
-    strategy: "jwt", // ✅ now using DB sessions
+    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.image = user.image;
-        token.role = user.role; // if you have role field
-      }
-      return token;
-    },
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        session.user.email = user.email;
-        session.user.name = user.name;
-        session.user.image =
-          user.image ??
-          `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            user.name || "U"
-          )}&background=random&color=fff`;
-      }
-      return session;
-    },
+  async redirect({ url, baseUrl }) {
+    // Always go home after login
+    return baseUrl;
+  },
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = (user as any).id;
+      token.email = user.email;
+      token.name = user.name;
+      token.image = (user as any).image;
+      token.role = (user as any).role;
+    }
+    return token;
+  },
+  async session({ session, token }) {
+    if (session.user) {
+      session.user.id = token.id as string;
+      session.user.email = token.email as string | undefined;
+      session.user.name = token.name as string | undefined;
+      session.user.image = token.image as string | undefined;
+      (session.user as any).role = token.role as string | undefined;
+    }
+    return session;
+  },
   },
   debug: process.env.NODE_ENV === "development",
 };

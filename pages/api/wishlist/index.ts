@@ -13,9 +13,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     // Get all wishlist items for this user
     const wishlist = await prisma.wishlistItem.findMany({
-      where: { userId },
-      include: { product: true },
-    });
+  where: { userId: String(session.user.id) },
+  include: { product: true },
+});
+
     return res.json(wishlist);
   }
 
@@ -24,13 +25,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!productId) return res.status(400).json({ error: "Missing productId" });
 
     const exists = await prisma.wishlistItem.findFirst({
-      where: { userId, productId },
+      where: { userId: String(userId), productId },
     });
 
     if (exists) return res.json(exists);
 
     const item = await prisma.wishlistItem.create({
-      data: { userId, productId },
+      data: { userId: String(userId), productId },
     });
     return res.json(item);
   }
@@ -40,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!productId) return res.status(400).json({ error: "Missing productId" });
 
     await prisma.wishlistItem.deleteMany({
-      where: { userId, productId },
+      where: { userId: String(userId), productId },
     });
     return res.json({ success: true });
   }

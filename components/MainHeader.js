@@ -6,6 +6,30 @@ import { useRouter } from 'next/router';
 import Logo from './Logo';
 import { useCart } from '../context/CartContext';
 import { useSession, signOut } from 'next-auth/react';
+function Avatar({ name, image }) {
+  if (image) {
+    return (
+      <img
+        src={image}
+        alt={name || "User"}
+        className="w-10 h-10 rounded-full object-cover"
+      />
+    );
+  }
+
+  const initials =
+    name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || "U";
+
+  return (
+    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium text-gray-700">
+      {initials}
+    </div>
+  );
+}
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -211,9 +235,7 @@ const MainHeader = () => {
                    className="w-8 h-8 rounded-full border border-gray-300"
                  />
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                 <Avatar name={session.user.name} image={session.user.image} />
                 )}
                 </button>
                 {activeDropdown === 'user' && (
