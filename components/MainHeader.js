@@ -13,11 +13,9 @@ const MainHeader = () => {
   const headerRef = useRef(null);
   const router = useRouter();
   const { user: localUser, logout } = useAuth();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const authUser = localUser || session?.user || null; // prefer local user if present
   const { cartCount, wishlistCount } = useCart(); // Get both cart and wishlist counts
-
-  
   // A list of the navigation items to make the component more maintainable.
   const navItems = [
     {
@@ -87,6 +85,11 @@ const MainHeader = () => {
       router.push('/');
     }
   };
+
+  if (status === 'loading') {
+    // Avoid rendering while session state is loading to prevent null flashes
+    return null;
+  }
 
 
   return (

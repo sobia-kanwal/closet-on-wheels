@@ -55,13 +55,23 @@ export const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/login", // point this to your custom login page
+    signIn: "/auth/index", // point this to your custom login page
   },
   session: {
-    strategy: "database", // ✅ now using DB sessions
+    strategy: "jwt", // ✅ now using DB sessions
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+        token.role = user.role; // if you have role field
+      }
+      return token;
+    },
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
