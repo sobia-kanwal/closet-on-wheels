@@ -20,7 +20,6 @@
     "@types/express-session": "^1.18.2",
     "@types/jsonwebtoken": "^9.0.10",
     "autoprefixer": "^10.4.14",
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "crypto-js": "^4.2.0",
     "express-session": "^1.18.2",
@@ -40,7 +39,6 @@
     "tailwindcss": "^3.3.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/node": "^24.3.1",
     "@types/react": "19.1.11",
     "critters": "^0.0.25",
