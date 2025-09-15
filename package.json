@@ -4,10 +4,11 @@
   "description": "E-commerce platform for renting products in Pakistan",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "dev": "next dev",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
