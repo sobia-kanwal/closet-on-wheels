@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import prisma from '../../../lib/db';
 import Product from '../../models/Product';
 import { getSessionUser } from '../../utils/encryption';
 

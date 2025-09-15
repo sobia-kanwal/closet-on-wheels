@@ -1,5 +1,5 @@
 // pages/api/orders/create.js
-import prisma from '@/lib/db';
+import prisma from '../../../lib/db';
 import Order from '../../../models/Order';
 
 export default async function handler(req, res) {
