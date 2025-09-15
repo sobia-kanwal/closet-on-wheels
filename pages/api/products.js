@@ -1,5 +1,4 @@
-import prisma from '../../../lib/db';
-import Product from '../../models/Product';
+import prisma from '../../lib/db';
 import { getSessionUser } from '../../utils/encryption';
 
 export default async function handler(req, res) {
@@ -11,7 +10,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       // Get all approved products
-      const products = await Prisma.product.find({ status: 'approved' }).populate('lenderId', 'name email');
+      const products = await prisma.product.find({ status: 'approved' }).populate('lenderId', 'name email');
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
@@ -23,7 +22,7 @@ export default async function handler(req, res) {
         lenderId: user.id
       };
       
-      const product = await Prisma.product.create(productData);
+      const product = await prisma.product.create(productData);
       res.status(201).json(product);
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
