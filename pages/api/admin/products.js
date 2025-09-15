@@ -1,5 +1,5 @@
-import prisma from '../../lib/db';
-import { getSessionUser } from '../../utils/encryption';
+import prisma from '../../../lib/db';
+import { getSessionUser } from '../../../utils/encryption';
 
 export default async function handler(req, res) {
   const user = getSessionUser();
