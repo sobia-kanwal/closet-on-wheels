@@ -1,5 +1,5 @@
 // pages/api/orders/[orderId].js
-import prisma from '../../lib/db';
+import prisma from '../../../lib/db';
 
 export default async function handler(req, res) {
   const { orderId } = req.query;
