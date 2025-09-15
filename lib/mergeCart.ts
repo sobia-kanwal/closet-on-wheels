@@ -8,7 +8,7 @@ export async function mergeGuestCart(userId: number) {
 
   for (const item of guestCart) {
     const existing = await prisma.cartItem.findFirst({
-      where: { userId, productId: item.productId },
+      where: { userId: userId.toString(), productId: item.productId },
     });
 
     if (existing) {
@@ -18,7 +18,7 @@ export async function mergeGuestCart(userId: number) {
       });
     } else {
       await prisma.cartItem.create({
-        data: { userId, productId: item.productId, quantity: item.quantity },
+        data: { userId: userId.toString(), productId: item.productId, quantity: item.quantity },
       });
     }
   }
