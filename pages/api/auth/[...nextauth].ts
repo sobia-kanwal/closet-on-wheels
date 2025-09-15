@@ -13,6 +13,7 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      httpOptions: { timeout: 10000 }, // ⬅️ extend to 10s
       authorization: {
         params: {
           prompt: "select_account", // ✅ forces account selector

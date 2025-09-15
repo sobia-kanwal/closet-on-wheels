@@ -1,11 +1,16 @@
 // components/ProductCard.js
 import Link from 'next/link';
-import AddToCartButton from './AddToCartButton'; // Assuming you have this component
+import AddToCartButton from './AddToCartButton';
+import AddToWishlistButton from './AddToWishlistButton';
 
 const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative">
-      
+      {/* Wishlist heart in top-right corner */}
+      <div className="absolute top-2 right-2 z-10">
+        <AddToWishlistButton product={product} />
+      </div>
+
       <Link href={`/products/${product.id}`}>
         <div className="cursor-pointer">
           <img

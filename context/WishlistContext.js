@@ -38,7 +38,11 @@ export function WishlistProvider({ children }) {
 
   const removeFromWishlist = async (productId) => {
     if (session?.user) {
-      await fetch(`/api/wishlist/${productId}`, { method: "DELETE" });
+      await fetch(`/api/wishlist`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
     } else {
       const updated = wishlist.filter((item) => item.productId !== productId);
       localStorage.setItem("guest_wishlist", JSON.stringify(updated));

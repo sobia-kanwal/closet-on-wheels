@@ -8,40 +8,58 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const session = await getServerSession(req, res, authOptions);
   if (!session?.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const userId = parseInt((session.user as { id: string }).id);
+  // userId is a String (cuid) in the schema; do NOT parseInt
+  const userId = (session.user as { id: string }).id;
 
   if (req.method === "GET") {
     // Get all wishlist items for this user
     const wishlist = await prisma.wishlistItem.findMany({
-  where: { userId: String(session.user.id) },
-  include: { product: true },
-});
+      where: { userId },
+      include: { product: true },
+    });
 
     return res.json(wishlist);
   }
 
   if (req.method === "POST") {
-    const { productId } = req.body;
-    if (!productId) return res.status(400).json({ error: "Missing productId" });
+    const { productId } = req.body as { productId?: number | string };
+    if (productId === undefined || productId === null)
+      return res.status(400).json({ error: "Missing productId" });
+
+    // Ensure productId is an integer
+    const productIdNum = typeof productId === "string" ? Number(productId) : productId;
+    if (!Number.isInteger(productIdNum)) {
+      return res.status(400).json({ error: "productId must be an integer" });
+    }
+
+    // Verify the product exists to avoid FK violations
+    const product = await prisma.product.findUnique({ where: { id: productIdNum } });
+    if (!product) return res.status(404).json({ error: "Product not found" });
 
     const exists = await prisma.wishlistItem.findFirst({
-      where: { userId: String(userId), productId },
+      where: { userId, productId: productIdNum },
     });
 
     if (exists) return res.json(exists);
 
     const item = await prisma.wishlistItem.create({
-      data: { userId: String(userId), productId },
+      data: { userId, productId: productIdNum },
     });
     return res.json(item);
   }
 
   if (req.method === "DELETE") {
-    const { productId } = req.body;
-    if (!productId) return res.status(400).json({ error: "Missing productId" });
+    const { productId } = req.body as { productId?: number | string };
+    if (productId === undefined || productId === null)
+      return res.status(400).json({ error: "Missing productId" });
+
+    const productIdNum = typeof productId === "string" ? Number(productId) : productId;
+    if (!Number.isInteger(productIdNum)) {
+      return res.status(400).json({ error: "productId must be an integer" });
+    }
 
     await prisma.wishlistItem.deleteMany({
-      where: { userId: String(userId), productId },
+      where: { userId, productId: productIdNum },
     });
     return res.json({ success: true });
   }

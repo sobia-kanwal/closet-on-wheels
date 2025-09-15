@@ -31,7 +31,7 @@ const Logo = () => {
           y="25" 
           className="logo-text"
         >
-          CLOSET ON WHEELS
+          Lehna
         </text>
       </svg>
 

@@ -45,3 +45,4 @@ const AddToCartButton = ({ product, variant = 'primary' }) => {
 };
 
 export default AddToCartButton;
+
