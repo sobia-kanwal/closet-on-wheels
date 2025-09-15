@@ -230,23 +230,23 @@ const MainHeader = () => {
                   className="text-gray-600 hover:text-teal-600 flex items-center"
                 > {authUser?.image ? (
                  <img
-                   src={authUser.image}
+                   src={authUser?.image}
                    alt="User"
                    className="w-8 h-8 rounded-full border border-gray-300"
                  />
                 ) : (
-                 <Avatar name={session.user.name} image={session.user.image} />
+                 <Avatar name={session.user?.name} image={session.user?.image} />
                 )}
                 </button>
                 {activeDropdown === 'user' && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-200">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-800">{authUser.name || authUser.email}</p>
-                      {authUser.email && (
-                        <p className="text-xs text-gray-600">{authUser.email}</p>
+                      <p className="text-sm font-medium text-gray-800">{authUser?.name || authUser?.email}</p>
+                      {authUser?.email && (
+                        <p className="text-xs text-gray-600">{authUser?.email}</p>
                       )}
-                      {authUser.type && (
-                        <p className="text-xs text-teal-600 capitalize">{authUser.type}</p>
+                      {authUser?.type && (
+                        <p className="text-xs text-teal-600 capitalize">{authUser?.type}</p>
                       )}
                     </div>
                     <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
@@ -255,12 +255,12 @@ const MainHeader = () => {
                     <Link href="/my-rentals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                       My Rentals
                     </Link>
-                    {authUser.type === 'lender' && (
+                    {authUser?.type === 'lender' && (
                       <Link href="/my-listings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                         My Listings
                       </Link>
                     )}
-                    {authUser.type === 'admin' && (
+                    {authUser?.type === 'admin' && (
                       <Link href="/dashboard/review-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50">
                         Review Products
                       </Link>
