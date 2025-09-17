@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
       <Link href={`/products/${product.id}`}>
         <div className="cursor-pointer">
           <img
-            src={product.images[0] || '/images/placeholder-product.jpg'}
+            src={product.images && product.images[0] || '/images/placeholder-product.jpg'}
             alt={product.name}
             className="w-full h-48 object-cover"
           />

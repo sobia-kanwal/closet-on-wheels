@@ -3,22 +3,20 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/router';
 
 const WishlistPage = () => {
   const { wishlist, removeFromWishlist, addToCartAndRemoveFromWishlist } = useCart();
-  const { user } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Redirect if not authenticated
-  useEffect(() => {
+  /*useEffect(() => {
     if (!user) {
       router.push('/auth?redirect=/wishlist');
     }
-  }, [user, router]);
+  }, [user, router]);*/
 
   const handleRemoveFromWishlist = (productId) => {
     removeFromWishlist(productId);
@@ -57,16 +55,6 @@ const WishlistPage = () => {
       setLoading(false);
     }
   };
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-lg text-gray-600">Redirecting to login...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
