@@ -17,6 +17,7 @@ export default function AddToWishlistButton({ product, className = "" }) {
     e?.preventDefault?.();
     if (!productId) return;
 
+    alert(`Toggling wishlist for product ID: ${productId}, currently liked: ${isLiked}`);
     if (isLiked) {
       await removeFromWishlist(productId);
       setIsLiked(false);

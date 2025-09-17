@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "context/WishlistContext.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "context/WishlistContext.js", "pages/api/wishlist/route.js", "pages/api/cart/index.ts"],
   "exclude": ["node_modules"]
 }

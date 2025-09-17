@@ -9,6 +9,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+     console.log("Fetching approved products");
       // Get all approved products
       const products = await prisma.product.find({ status: 'approved' }).populate('lenderId', 'name email');
       res.status(200).json(products);

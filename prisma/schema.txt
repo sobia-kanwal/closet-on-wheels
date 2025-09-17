@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())   // 👈 changed to String
+  name          String?
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+
+  role          Role           @default(USER)
+  provider      String?
+  providerId    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  cartItems     CartItem[]
+  products      Product[]
+  rentals       Rental[]
+  reviews       Review[]
+  activities    UserActivity[]
+  wishlistItem  WishlistItem[]
+
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String     // <-- this is the "userId | integer"
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String   // 👈 was Int, now String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  title          String
+  description    String
+  brand          String
+  category       String
+  size           String
+  color          String
+  price          Float
+  rentalPrice    Float?
+  images         String[]
+  feedback       String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  ownerId        String         // 👈 was Int, now String
+  status         String         @default("PENDING")
+
+  cartItems      CartItem[]
+  owner          User           @relation(fields: [ownerId], references: [id])
+  rentals        Rental[]
+  reviews        Review[]
+  userActivities UserActivity[]
+  wishlistItem   WishlistItem[]
+}
+
+model Rental {
+  id         Int          @id @default(autoincrement())
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Float
+  status     RentalStatus @default(RESERVED)
+  createdAt  DateTime     @default(now())
+  productId  Int
+  renterId   String       // 👈 was Int, now String
+
+  product    Product      @relation(fields: [productId], references: [id])
+  renter     User         @relation(fields: [renterId], references: [id])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  productId Int
+  userId    String   // 👈 was Int, now String
+
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model UserActivity {
+  id        Int          @id @default(autoincrement())
+  type      ActivityType
+  createdAt DateTime     @default(now())
+  userId    String       // 👈 was Int, now String
+  productId Int
+
+  product   Product      @relation(fields: [productId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    String   // 👈 was Int, now String
+  productId Int
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model WishlistItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    String   // 👈 was Int, now String
+  productId Int
+
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RENTED
+}
+
+enum RentalStatus {
+  RESERVED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ActivityType {
+  VIEW
+  LIKE
+  RENT
+  FAVORITE
+}

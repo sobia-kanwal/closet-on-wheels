@@ -11,14 +11,14 @@ const AddToCartButton = ({ product, variant = 'primary' }) => {
     try {
       // Check if the product is in the wishlist
       const inWishlist = isInWishlist(product.id);
-      
+      alert(`Product ${product.id} is in wishlist: ${inWishlist}`);
       if (inWishlist) {
         // Use the combined function that adds to cart and removes from wishlist
         addToCartAndRemoveFromWishlist(product);
         alert(`${product.name} added to cart and removed from wishlist!`);
       } else {
         // Standard add to cart
-        addToCart(product);
+        addToCart(product.id, product.quantity || 1);
         alert(`${product.name} added to cart!`);
       }
     } catch (error) {

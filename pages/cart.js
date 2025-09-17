@@ -8,6 +8,7 @@ const Cart = () => {
   const { cart, updateCartItem, removeFromCart, clearCart, getCartTotal } = useCart();
   const [loading, setLoading] = useState(false);
 
+  alert(`Cart contents: ${JSON.stringify(cart)}`);
   const updateDays = (productId, days) => {
     const daysValue = Math.max(1, parseInt(days) || 1);
     updateCartItem(productId, { days: daysValue });
@@ -68,9 +69,9 @@ const Cart = () => {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>{item.name}</h3>
-                              <p className="ml-4">Rs. {item.total.toLocaleString()}</p>
+                              <p className="ml-4">Rs. {item.total}</p>
                             </div>
-                            <p className="mt-1 text-sm text-gray-500">Rs. {item.price.toLocaleString()} / day</p>
+                            <p className="mt-1 text-sm text-gray-500">Rs. {item.price} / day</p>
                           </div>
                           <div className="flex-1 flex items-end justify-between text-sm">
                             <div className="flex flex-col space-y-2">
@@ -128,18 +129,18 @@ const Cart = () => {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal ({getCartItemsCount()} items)</span>
-                    <span className="font-medium">Rs. {getCartTotal().toLocaleString()}</span>
+                    <span className="font-medium">Rs. {getCartTotal}</span>
                   </div>
                   
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tax (5%)</span>
-                    <span className="font-medium">Rs. {(getCartTotal() * 0.05).toLocaleString()}</span>
+                    <span className="font-medium">Rs. {(getCartTotal * 0.05)}</span>
                   </div>
                   
                   <div className="flex justify-between border-t border-gray-200 pt-3">
                     <span className="text-lg font-semibold text-gray-800">Total</span>
                     <span className="text-lg font-semibold text-teal-600">
-                      Rs. {(getCartTotal() * 1.05).toLocaleString()}
+                      Rs. {(getCartTotal * 1.05)}
                     </span>
                   </div>
                 </div>
