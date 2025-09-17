@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
       <Link href={`/products/${product.id}`}>
         <div className="cursor-pointer">
           <img
-            src={product.image || '/images/placeholder-product.jpg'}
+            src={product.images[0] || '/images/placeholder-product.jpg'}
             alt={product.name}
             className="w-full h-48 object-cover"
           />
@@ -25,6 +25,12 @@ const ProductCard = ({ product }) => {
               <span className="text-lg font-bold text-teal-600">PKR {product.price}/day</span>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                 {product.category}
+              </span>
+              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                {product.brand}
+              </span>
+              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                {product.size}
               </span>
             </div>
           </div>

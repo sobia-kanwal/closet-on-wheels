@@ -16,7 +16,20 @@ export default async function handler(req, res) {
         filter.status = status;
       }
       
-      const products = await prisma.product.find(filter).populate('lenderId', 'name email');
+      const products = await prisma.product.findMany({
+        where: filter,
+        include: {
+          owner: {
+            select: {
+              name: true,
+              email: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
@@ -24,20 +37,34 @@ export default async function handler(req, res) {
   } else if (req.method === 'PUT') {
     try {
       const { id } = req.query;
-      const { status, adminFeedback } = req.body;
-      
-      const product = await Prisma.product.findByIdAndUpdate(
-        id,
-        { status, adminFeedback, updatedAt: new Date() },
-        { new: true }
-      ).populate('lenderId', 'name email');
-      
+      const { status, feedback } = req.body;
+
+      const product = await prisma.product.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          status: status || undefined,
+          feedback: feedback || undefined,
+          updatedAt: new Date()
+        },
+        include: {
+          owner: {
+            select: {
+              name: true,
+              email: true
+            }
+          }
+        }
+      });
+
       if (!product) {
         return res.status(404).json({ message: 'Product not found' });
       }
-      
+
       res.status(200).json(product);
     } catch (error) {
+      console.error('Error updating product:', error);
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   } else {

@@ -11,7 +11,22 @@ export default async function handler(req, res) {
     try {
      console.log("Fetching approved products");
       // Get all approved products
-      const products = await prisma.product.find({ status: 'approved' }).populate('lenderId', 'name email');
+      const products = await prisma.product.findMany({
+        where: {
+          status: 'APPROVED'
+        },
+        include: {
+          owner: {
+            select: {
+              name: true,
+              email: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });

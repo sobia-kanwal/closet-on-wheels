@@ -46,10 +46,10 @@ const MainHeader = () => {
       title: "Fashion",
       id: "fashion",
       links: [
-        { name: "Dresses", href: "/category/fashion/dresses" },
-        { name: "Accessories", href: "/category/fashion/accessories" },
-        { name: "Footwear", href: "/category/fashion/footwear" },
-        { name: "Jewelry", href: "/category/fashion/jewelry" },
+        { name: "Dresses", href: "/category/dresses" },
+        { name: "Accessories", href: "/category/accessories" },
+        { name: "Footwear", href: "/category/footwear" },
+        { name: "Jewelry", href: "/category/jewelry" },
       ]
     },
     {
