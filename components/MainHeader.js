@@ -56,20 +56,20 @@ const MainHeader = () => {
       title: "Home Items",
       id: "home",
       links: [
-        { name: "Furniture", href: "/category/home/furniture" },
-        { name: "Decor", href: "/category/home/decor" },
-        { name: "Kitchen", href: "/category/home/kitchen" },
-        { name: "Electronics", href: "/category/home/electronics" },
+        { name: "Furniture", href: "/category/furniture" },
+        { name: "Decor", href: "/category/decor" },
+        { name: "Kitchen", href: "/category/kitchen" },
+        { name: "Electronics", href: "/category/electronics" },
       ]
     },
     {
       title: "Events",
       id: "events",
       links: [
-        { name: "Wedding", href: "/category/events/wedding" },
-        { name: "Party", href: "/category/events/party" },
-        { name: "Corporate", href: "/category/events/corporate" },
-        { name: "Photography", href: "/category/events/photography" },
+        { name: "Wedding", href: "/category/wedding" },
+        { name: "Party", href: "/category/party" },
+        { name: "Corporate", href: "/category/corporate" },
+        { name: "Photography", href: "/category/photography" },
       ]
     },
   ];
